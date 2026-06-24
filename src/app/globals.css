@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --grid: rgba(255, 255, 255, 0.028);
+  --font-display: "Poppins", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: theme("colors.ink.DEFAULT");
+  color: theme("colors.bone");
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Ambient grid + grain backdrop — the terminal feel */
+.bg-terminal {
+  background-color: theme("colors.ink.DEFAULT");
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center;
+}
+
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* LED ticker text */
+.led {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Marquee strip: the duplicated track scrolls; pause on hover */
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+}
+.marquee-strip:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
+/* Thin scrollbars inside terminal panels */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: theme("colors.ink.500");
+  border-radius: 999px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Focus visibility floor */
+:focus-visible {
+  outline: 2px solid theme("colors.chad.DEFAULT");
+  outline-offset: 2px;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.clip-chad {
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 92% 100%, 0 100%);
+}
+
+/* Brand marketing gradient: blue -> teal -> mint (from the app store art) */
+.brand-gradient {
+  background-image: linear-gradient(
+    160deg,
+    #2594ff 0%,
+    #3fd3d0 52%,
+    #8ddfce 100%
+  );
+}
+.brand-text-gradient {
+  background-image: linear-gradient(100deg, #2594ff 0%, #14f195 60%, #5bffa6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.brand-glow {
+  background: radial-gradient(
+    60% 60% at 70% 30%,
+    rgba(37, 148, 255, 0.18) 0%,
+    rgba(63, 211, 208, 0.12) 40%,
+    transparent 75%
+  );
+}
