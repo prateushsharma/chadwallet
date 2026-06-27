@@ -57,7 +57,7 @@ export function TokenBanner({
       .catch(() => {});
     const id = setInterval(() => {
       api.trending().then((r) => alive && r.tokens?.length && setTokens(r.tokens)).catch(() => {});
-    }, 30000);
+    }, 60000);
     return () => {
       alive = false;
       clearInterval(id);
