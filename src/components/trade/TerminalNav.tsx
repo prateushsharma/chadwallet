@@ -7,6 +7,7 @@ import { Logo } from "@/components/Logo";
 import { api } from "@/lib/api";
 import { Token } from "@/lib/types";
 import { AuthButton } from "@/components/AuthButton";
+import { LiveBadge } from "./LiveBadge";
 
 export function TerminalNav() {
   const router = useRouter();
@@ -78,6 +79,7 @@ export function TerminalNav() {
 
         {/* cash + deposit + avatar */}
         <div className="hidden items-center gap-4 sm:flex">
+          <LiveBadge />
           <div className="text-right">
             <p className="led text-sm font-bold text-bone">$0.00 <span className="text-muted">cash</span></p>
             <button className="text-xs font-bold text-chad hover:underline">Deposit more</button>
