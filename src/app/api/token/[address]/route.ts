@@ -4,17 +4,14 @@ import { findMock, MOCK_TOKENS } from "@/lib/mock";
 
 export const revalidate = 20;
 
-export async function GET(
-  _req: Request,
-  { params }: { params: { address: string } }
-) {
-  const { address } = params;
+export async function GET(_req: Request, { params }: { params: { address: string } }) {
   if (hasBirdeye()) {
     try {
-      const token = await fetchTokenOverview(address);
+      const token = await fetchTokenOverview(params.address);
       if (token?.address) return NextResponse.json({ source: "birdeye", token });
-    } catch {}
+    } catch (e) {
+      console.error("[api/token] fallback:", (e as Error).message);
+    }
   }
-  const token = findMock(address) ?? MOCK_TOKENS[0];
-  return NextResponse.json({ source: "mock", token });
+  return NextResponse.json({ source: "mock", token: findMock(params.address) ?? MOCK_TOKENS[0] });
 }
