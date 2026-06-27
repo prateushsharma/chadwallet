@@ -5,6 +5,7 @@ import { api } from "@/lib/api";
 import { Token, Trade, Holder } from "@/lib/types";
 import { RichHolder, holderExtras, genRichHolders } from "@/lib/feed";
 import { fmtUsd, fmtNum, fmtPct, timeAgo, shortAddr } from "@/lib/format";
+import { useTrader } from "./TraderProfile";
 
 type TabKey = "holders" | "swaps" | "thesis";
 
@@ -15,6 +16,7 @@ export function ActivityTable({ token }: { token: Token }) {
   const [loading, setLoading] = useState(false);
   // remember which (token,tab) we've already fetched so toggling back is free
   const loaded = useRef<{ holders?: string; trades?: string }>({});
+  const trader = useTrader();
 
   // reset when token changes
   useEffect(() => {
@@ -88,15 +90,15 @@ export function ActivityTable({ token }: { token: Token }) {
       </div>
 
       <div className="scroll-thin flex-1 overflow-y-auto">
-        {tab === "holders" && <Holders holders={holders} />}
+        {tab === "holders" && <Holders holders={holders} onPick={(h) => trader.open(h, token)} />}
         {tab === "swaps" && <Swaps trades={trades} loading={loading} />}
-        {tab === "thesis" && <ThesisList holders={holders} />}
+        {tab === "thesis" && <ThesisList holders={holders} onPick={(h) => trader.open(h, token)} />}
       </div>
     </div>
   );
 }
 
-function Holders({ holders }: { holders: RichHolder[] }) {
+function Holders({ holders, onPick }: { holders: RichHolder[]; onPick: (h: RichHolder) => void }) {
   return (
     <table className="w-full text-sm">
       <thead className="led sticky top-0 bg-ink-800 text-[10px] uppercase tracking-wide text-muted">
@@ -112,7 +114,7 @@ function Holders({ holders }: { holders: RichHolder[] }) {
         {holders.map((h) => {
           const up = h.pnlUsd >= 0;
           return (
-            <tr key={h.rank} className="border-b border-ink-700/60 align-top">
+            <tr key={h.rank} onClick={() => onPick(h)} className="cursor-pointer border-b border-ink-700/60 align-top hover:bg-ink-700/40">
               <td className="px-4 py-2.5">
                 <div className="flex items-center gap-2">
                   <span className="h-7 w-7 shrink-0 rounded-full" style={{ background: `hsl(${h.hue} 60% 45%)` }} />
@@ -176,11 +178,11 @@ function Swaps({ trades, loading }: { trades: Trade[]; loading: boolean }) {
   );
 }
 
-function ThesisList({ holders }: { holders: RichHolder[] }) {
+function ThesisList({ holders, onPick }: { holders: RichHolder[]; onPick: (h: RichHolder) => void }) {
   return (
     <div className="divide-y divide-ink-700/60">
       {holders.map((h) => (
-        <div key={h.rank} className="flex items-start gap-3 px-4 py-3">
+        <div key={h.rank} onClick={() => onPick(h)} className="flex cursor-pointer items-start gap-3 px-4 py-3 hover:bg-ink-700/40">
           <span className="h-8 w-8 shrink-0 rounded-full" style={{ background: `hsl(${h.hue} 60% 45%)` }} />
           <div className="min-w-0">
             <div className="flex items-center gap-2">

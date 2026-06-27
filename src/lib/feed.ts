@@ -128,3 +128,46 @@ export function holderExtras(owner: string) {
     thesisLikes: Math.floor(r() * 40),
   };
 }
+
+export interface TraderTx {
+  side: "buy" | "sell";
+  amountUsd: number;
+  mc: number;
+  time: number;
+}
+
+// Deterministic transaction history for a wallet on a token (estimated —
+// BirdEye free tier doesn't expose per-wallet trade history).
+export function genTraderTxs(owner: string, token: Token, n = 9): TraderTx[] {
+  const r = seeded(hash(owner + token.address) + 9);
+  const txs: TraderTx[] = [];
+  for (let i = 0; i < n; i++) {
+    txs.push({
+      side: r() > 0.3 ? "buy" : "sell",
+      amountUsd: 100 + r() * 8000,
+      mc: token.marketCap * (0.4 + r() * 1.2),
+      time: Date.now() - i * (3600_000 + r() * 6 * 3600_000),
+    });
+  }
+  return txs;
+}
+
+// Build a RichHolder from just a name (used for clickable feed rows).
+export function holderFromName(name: string, token: Token, positionUsd?: number): RichHolder {
+  const e = holderExtras(name);
+  const pos = positionUsd ?? 500 + (hash(name) % 50000);
+  return {
+    rank: 0,
+    name,
+    hue: e.hue,
+    holdTime: e.holdTime,
+    positionUsd: pos,
+    tokenAmount: pos / (token.price || 1),
+    pnlUsd: pos * (e.pnlPct / 100),
+    pnlPct: e.pnlPct,
+    avgEntryMc: token.marketCap * e.avgEntryFactor,
+    avgEntryPrice: token.price * e.avgEntryFactor,
+    thesis: e.thesis,
+    thesisLikes: e.thesisLikes,
+  };
+}

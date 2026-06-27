@@ -10,6 +10,7 @@ import { ChartArea } from "./ChartArea";
 import { TokenHeader } from "./TokenPanels";
 import { ActivityTable } from "./ActivityTable";
 import { SwapPanel } from "./SwapPanel";
+import { TraderProvider } from "./TraderProfile";
 
 export function TradeTerminal() {
   const router = useRouter();
@@ -51,6 +52,7 @@ export function TradeTerminal() {
   }
 
   return (
+    <TraderProvider>
     <div className="grid h-[calc(100vh-92px)] grid-cols-1 lg:grid-cols-[280px_1fr_330px]">
       {/* Left — feed / tokens */}
       <aside className="hidden min-h-0 overflow-hidden border-r border-ink-600 lg:block">
@@ -71,5 +73,6 @@ export function TradeTerminal() {
         <SwapPanel token={selected} solPriceUsd={solPrice} />
       </aside>
     </div>
+    </TraderProvider>
   );
 }

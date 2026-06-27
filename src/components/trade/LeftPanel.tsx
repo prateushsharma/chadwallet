@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { Token } from "@/lib/types";
-import { FeedItem, genFeed } from "@/lib/feed";
+import { FeedItem, genFeed, holderFromName } from "@/lib/feed";
+import { useTrader } from "./TraderProfile";
 import { fmtUsd } from "@/lib/format";
 import { TrendingList } from "./TrendingList";
 
@@ -66,6 +67,7 @@ export function LeftPanel({
 }
 
 function Feed({ token, feed }: { token: Token; feed: FeedItem[] }) {
+  const trader = useTrader();
   return (
     <div className="scroll-thin flex-1 overflow-y-auto">
       <div className="flex items-center gap-1 px-3 py-2 text-xs text-muted">
@@ -94,7 +96,7 @@ function Feed({ token, feed }: { token: Token; feed: FeedItem[] }) {
 
       {/* activity */}
       {feed.map((f) => (
-        <div key={f.id} className="border-b border-ink-700/60 px-3 py-2.5">
+        <div key={f.id} onClick={() => f.kind === "trade" && trader.open(holderFromName(f.user, token, f.amountUsd), token)} className="cursor-pointer border-b border-ink-700/60 px-3 py-2.5 hover:bg-ink-700/40">
           <div className="flex items-center gap-2 text-xs">
             {f.kind === "group" ? (
               <span className="grid h-6 w-6 place-items-center rounded-full bg-ink-600 text-[10px]">👥</span>
