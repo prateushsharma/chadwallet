@@ -7,15 +7,15 @@ const config: Config = {
       colors: {
         // ChadWallet palette — sampled from the real app + brand kit
         ink: {
-          DEFAULT: "#020817", // app background (deep navy-black)
-          900: "#020817",
-          800: "#07101C",
-          700: "#0C1727",
-          600: "#162234", // card borders
-          500: "#243246", // dividers / scrollbar
+          DEFAULT: "#0A0A0D", // neutral near-black (fomo-like)
+          900: "#0A0A0D",
+          800: "#101014",
+          700: "#16161C",
+          600: "#20212A", // borders
+          500: "#2B2C36", // dividers / scrollbar
         },
-        bone: "#F4F7FB", // cool white text
-        muted: "#7E8AA0", // blue-grey secondary text
+        bone: "#EDEFF3", // near-white text
+        muted: "#888B96", // neutral grey secondary text
         chad: {
           DEFAULT: "#26ED80", // brand green (Buy pill)
           dim: "#1FBE67",
