@@ -1,35 +1,75 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { Token, Trade, Holder } from "@/lib/types";
 import { RichHolder, holderExtras, genRichHolders } from "@/lib/feed";
-import { shortAddr } from "@/lib/format";
-import { fmtUsd, fmtNum, fmtPct, timeAgo } from "@/lib/format";
+import { fmtUsd, fmtNum, fmtPct, timeAgo, shortAddr } from "@/lib/format";
+
+type TabKey = "holders" | "swaps" | "thesis";
 
 export function ActivityTable({ token }: { token: Token }) {
-  const [tab, setTab] = useState<"holders" | "swaps" | "thesis">("holders");
+  const [tab, setTab] = useState<TabKey>("holders");
   const [trades, setTrades] = useState<Trade[]>([]);
   const [holders, setHolders] = useState<RichHolder[]>(genRichHolders(token));
+  const [loading, setLoading] = useState(false);
+  // remember which (token,tab) we've already fetched so toggling back is free
+  const loaded = useRef<{ holders?: string; trades?: string }>({});
 
+  // reset when token changes
+  useEffect(() => {
+    loaded.current = {};
+    setHolders(genRichHolders(token));
+    setTrades([]);
+  }, [token.address]);
+
+  // lazy fetch: only the active tab, only once per token
   useEffect(() => {
     let alive = true;
-    const load = () => {
-      api.trades(token.address).then((r) => alive && setTrades(r.trades)).catch(() => {});
-      // Real holder addresses + balances from BirdEye (where the tier allows);
-      // decorate with deterministic PnL/entry/thesis estimates per wallet.
-      api.holders(token.address).then((r) => {
-        if (!alive || !r.holders?.length) return;
-        setHolders(r.holders.map((h: Holder) => decorate(h, token)));
-      }).catch(() => {});
-    };
+    async function load() {
+      if (tab === "holders" || tab === "thesis") {
+        if (loaded.current.holders === token.address) return;
+        setLoading(true);
+        try {
+          const r = await api.holders(token.address);
+          if (alive && r.holders?.length) {
+            setHolders(r.holders.map((h: Holder) => decorate(h, token)));
+            loaded.current.holders = token.address;
+          }
+        } finally {
+          if (alive) setLoading(false);
+        }
+      } else if (tab === "swaps") {
+        if (loaded.current.trades === token.address) return;
+        setLoading(true);
+        try {
+          const r = await api.trades(token.address);
+          if (alive) {
+            setTrades(r.trades ?? []);
+            loaded.current.trades = token.address;
+          }
+        } finally {
+          if (alive) setLoading(false);
+        }
+      }
+    }
     load();
-    const id = setInterval(load, 8000);
     return () => {
       alive = false;
-      clearInterval(id);
     };
-  }, [token.address]);
+  }, [tab, token.address, token]);
+
+  function refresh() {
+    loaded.current = {};
+    // re-trigger by toggling state
+    setTab((t) => t);
+    // force reload of current tab
+    if (tab === "swaps") {
+      api.trades(token.address).then((r) => setTrades(r.trades ?? [])).catch(() => {});
+    } else {
+      api.holders(token.address).then((r) => r.holders?.length && setHolders(r.holders.map((h: Holder) => decorate(h, token)))).catch(() => {});
+    }
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -37,15 +77,19 @@ export function ActivityTable({ token }: { token: Token }) {
         <Tab on={tab === "holders"} onClick={() => setTab("holders")}>Holders</Tab>
         <Tab on={tab === "swaps"} onClick={() => setTab("swaps")}>Swaps</Tab>
         <Tab on={tab === "thesis"} onClick={() => setTab("thesis")}>Thesis ({holders.length * 20 + 9})</Tab>
-        <div className="ml-auto flex gap-4 pr-3 text-xs text-muted">
-          <span>☐ Thesis only</span>
-          <span>☐ Friends only</span>
+        <div className="ml-auto flex items-center gap-3 pr-3 text-xs text-muted">
+          {loading && <span className="led text-chad">syncing…</span>}
+          <button onClick={refresh} title="Refresh (uses 1 API call)" className="rounded p-1 hover:bg-ink-700 hover:text-bone">
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth="2">
+              <path d="M20 11a8 8 0 10-2.3 5.7M20 4v5h-5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
 
       <div className="scroll-thin flex-1 overflow-y-auto">
         {tab === "holders" && <Holders holders={holders} />}
-        {tab === "swaps" && <Swaps trades={trades} />}
+        {tab === "swaps" && <Swaps trades={trades} loading={loading} />}
         {tab === "thesis" && <ThesisList holders={holders} />}
       </div>
     </div>
@@ -104,7 +148,7 @@ function Holders({ holders }: { holders: RichHolder[] }) {
   );
 }
 
-function Swaps({ trades }: { trades: Trade[] }) {
+function Swaps({ trades, loading }: { trades: Trade[]; loading: boolean }) {
   return (
     <table className="w-full text-sm">
       <thead className="led sticky top-0 bg-ink-800 text-[10px] uppercase tracking-wide text-muted">
@@ -118,16 +162,14 @@ function Swaps({ trades }: { trades: Trade[] }) {
       <tbody>
         {trades.map((t) => (
           <tr key={t.id} className="led border-b border-ink-700/60 text-xs">
-            <td className={`px-4 py-1.5 font-bold ${t.side === "buy" ? "text-mint" : "text-ember"}`}>
-              {t.side === "buy" ? "BUY" : "SELL"}
-            </td>
+            <td className={`px-4 py-1.5 font-bold ${t.side === "buy" ? "text-mint" : "text-ember"}`}>{t.side === "buy" ? "BUY" : "SELL"}</td>
             <td className="px-4 py-1.5 text-right text-bone">{fmtNum(t.amountToken)}</td>
             <td className="px-4 py-1.5 text-right text-bone">{fmtUsd(t.amountUsd)}</td>
             <td className="px-4 py-1.5 text-right text-muted">{timeAgo(t.time)}</td>
           </tr>
         ))}
         {!trades.length && (
-          <tr><td colSpan={4} className="p-4 text-center text-sm text-muted">No recent swaps.</td></tr>
+          <tr><td colSpan={4} className="p-6 text-center text-sm text-muted">{loading ? "Loading swaps…" : "Open this tab to load live swaps."}</td></tr>
         )}
       </tbody>
     </table>
@@ -153,7 +195,7 @@ function ThesisList({ holders }: { holders: RichHolder[] }) {
   );
 }
 
-function decorate(h: { rank: number; owner: string; amount: number; percentage: number }, token: Token): RichHolder {
+function decorate(h: Holder, token: Token): RichHolder {
   const e = holderExtras(h.owner);
   const positionUsd = h.amount * token.price;
   return {
