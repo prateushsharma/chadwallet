@@ -2,20 +2,25 @@ import { Navbar } from "@/components/Navbar";
 import { TokenBanner } from "@/components/TokenBanner";
 import { Hero } from "@/components/Hero";
 import { Showcase } from "@/components/Showcase";
-import { Features } from "@/components/Features";
+import { FomoCards } from "@/components/FomoCards";
+import { Community } from "@/components/Community";
 import { Download, Footer } from "@/components/Download";
 
 export default function HomePage() {
   return (
     <main className="relative z-10">
-      <Navbar />
-      {/* Top rotating banner */}
+      {/* Top rotating token banner */}
       <TokenBanner />
-      <Hero />
+      {/* Hero with overlaid navbar */}
+      <div className="relative">
+        <Navbar variant="overlay" />
+        <Hero />
+      </div>
       <Showcase />
-      <Features />
+      <FomoCards />
+      <Community />
       <Download />
-      {/* Bottom rotating banner (opposite direction) */}
+      {/* Bottom rotating token banner */}
       <TokenBanner reverse speed={52} />
       <Footer />
     </main>

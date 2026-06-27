@@ -19,17 +19,15 @@ export function Showcase() {
         <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           {/* Video */}
           <div>
-            <p className="led text-sm uppercase tracking-widest text-chad">
-              See it in action
-            </p>
+            <p className="kicker text-xs text-chad">Now available on web</p>
             <h2 className="mt-3 font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
-              The whole market,
+              trade from anywhere.
               <br />
-              in your thumb.
+              never lose a beat.
             </h2>
             <p className="mt-4 max-w-md text-muted">
-              From spotting a mover to settling a swap — every step lives on one
-              screen, built for one hand and a fast thumb.
+              Open a trade on your phone, close it on your desktop — all in one
+              app, always in sync.
             </p>
 
             <div className="mt-8 overflow-hidden rounded-2xl border border-ink-600 bg-black shadow-panel">

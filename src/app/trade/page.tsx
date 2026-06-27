@@ -6,13 +6,11 @@ import { TradeTerminal } from "@/components/trade/TradeTerminal";
 export default function TradePage() {
   return (
     <main className="relative z-10 min-h-screen">
-      <Navbar />
+      <Navbar variant="solid" />
       <TokenBanner speed={40} />
       <Suspense
         fallback={
-          <div className="led p-10 text-center text-muted">
-            loading terminal…
-          </div>
+          <div className="led p-10 text-center text-muted">loading terminal…</div>
         }
       >
         <TradeTerminal />
