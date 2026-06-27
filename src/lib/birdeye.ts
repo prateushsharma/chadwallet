@@ -151,10 +151,19 @@ export async function fetchTrades(address: string, limit = 30): Promise<Trade[]>
   });
 }
 
+const CANDLE_WINDOW: Record<string, number> = {
+  "1m": 60 * 60 * 6,
+  "5m": 60 * 60 * 24,
+  "15m": 60 * 60 * 24 * 2,
+  "1H": 60 * 60 * 24 * 10,
+  "4H": 60 * 60 * 24 * 30,
+  "1D": 60 * 60 * 24 * 365,
+};
+
 export async function fetchCandles(address: string, type = "15m"): Promise<Candle[]> {
-  return cached(`candles:${address}`, 30_000, async () => {
+  return cached(`candles:${address}:${type}`, 30_000, async () => {
     const now = Math.floor(Date.now() / 1000);
-    const from = now - 60 * 60 * 24 * 2;
+    const from = now - (CANDLE_WINDOW[type] ?? 60 * 60 * 24 * 2);
     const data = await be<{ items: any[] }>("/defi/ohlcv", { address, type, time_from: from, time_to: now });
     return (data.items ?? []).map((c) => ({
       time: Number(c.unixTime ?? c.unix_time),

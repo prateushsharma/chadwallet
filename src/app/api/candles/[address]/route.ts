@@ -4,10 +4,11 @@ import { findMock, MOCK_TOKENS, mockCandles } from "@/lib/mock";
 
 export const revalidate = 20;
 
-export async function GET(_req: Request, { params }: { params: { address: string } }) {
+export async function GET(req: Request, { params }: { params: { address: string } }) {
+  const type = new URL(req.url).searchParams.get("type") || "15m";
   if (hasBirdeye()) {
     try {
-      const candles = await fetchCandles(params.address);
+      const candles = await fetchCandles(params.address, type);
       if (candles.length) return NextResponse.json({ source: "birdeye", candles });
     } catch (e) {
       console.error("[api/candles] fallback:", (e as Error).message);
