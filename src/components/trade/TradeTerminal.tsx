@@ -63,7 +63,7 @@ export function TradeTerminal() {
 
   return (
     <div className="mx-auto max-w-[1600px] px-2 py-3 sm:px-4">
-      <div className="grid gap-3 lg:grid-cols-[260px_1fr_320px]">
+      <div className="grid gap-3 lg:grid-cols-[256px_1fr_340px]">
         {/* Left — trending */}
         <aside className="hidden h-[calc(100vh-180px)] overflow-hidden rounded-xl border border-ink-600 bg-ink-800/60 lg:block">
           <TrendingList
