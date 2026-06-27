@@ -2,21 +2,29 @@
 
 import React, { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { Token, Trade } from "@/lib/types";
-import { genRichHolders, RichHolder } from "@/lib/feed";
+import { Token, Trade, Holder } from "@/lib/types";
+import { RichHolder, holderExtras, genRichHolders } from "@/lib/feed";
+import { shortAddr } from "@/lib/format";
 import { fmtUsd, fmtNum, fmtPct, timeAgo } from "@/lib/format";
 
 export function ActivityTable({ token }: { token: Token }) {
   const [tab, setTab] = useState<"holders" | "swaps" | "thesis">("holders");
   const [trades, setTrades] = useState<Trade[]>([]);
-  const holders = genRichHolders(token);
+  const [holders, setHolders] = useState<RichHolder[]>(genRichHolders(token));
 
   useEffect(() => {
     let alive = true;
-    const load = () =>
+    const load = () => {
       api.trades(token.address).then((r) => alive && setTrades(r.trades)).catch(() => {});
+      // Real holder addresses + balances from BirdEye (where the tier allows);
+      // decorate with deterministic PnL/entry/thesis estimates per wallet.
+      api.holders(token.address).then((r) => {
+        if (!alive || !r.holders?.length) return;
+        setHolders(r.holders.map((h: Holder) => decorate(h, token)));
+      }).catch(() => {});
+    };
     load();
-    const id = setInterval(load, 6000);
+    const id = setInterval(load, 8000);
     return () => {
       alive = false;
       clearInterval(id);
@@ -143,6 +151,25 @@ function ThesisList({ holders }: { holders: RichHolder[] }) {
       ))}
     </div>
   );
+}
+
+function decorate(h: { rank: number; owner: string; amount: number; percentage: number }, token: Token): RichHolder {
+  const e = holderExtras(h.owner);
+  const positionUsd = h.amount * token.price;
+  return {
+    rank: h.rank,
+    name: h.owner ? shortAddr(h.owner, 4) : "wallet",
+    hue: e.hue,
+    holdTime: e.holdTime,
+    positionUsd,
+    tokenAmount: h.amount,
+    pnlUsd: positionUsd * (e.pnlPct / 100),
+    pnlPct: e.pnlPct,
+    avgEntryMc: token.marketCap * e.avgEntryFactor,
+    avgEntryPrice: token.price * e.avgEntryFactor,
+    thesis: e.thesis,
+    thesisLikes: e.thesisLikes,
+  };
 }
 
 function Tab({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
