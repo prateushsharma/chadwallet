@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { StartTradingButton } from "@/components/AuthButton";
 
 const ANDROID = "https://play.google.com/store/apps/details?id=xyz.chadwallet.www";
 
@@ -21,12 +22,7 @@ export function Community() {
           Join 500,000+ traders making their name on ChadWallet.
         </p>
         <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href="/trade"
-            className="rounded-xl bg-chad px-7 py-3.5 font-display font-bold text-ink shadow-glow transition hover:bg-chad-glow"
-          >
-            Start trading
-          </Link>
+          <StartTradingButton className="rounded-xl bg-chad px-7 py-3.5 font-display font-bold text-ink shadow-glow transition hover:bg-chad-glow">Start trading</StartTradingButton>
           <a
             href={ANDROID}
             target="_blank"
