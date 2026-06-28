@@ -93,6 +93,17 @@ export function PriceChart({
   }, [address, timeframe]); // refetch when timeframe changes
 
   // right-click menu
+  function zoom(factor: number) {
+    const ts = chartRef.current?.timeScale();
+    if (!ts) return;
+    const cur = ts.options().barSpacing ?? 6;
+    ts.applyOptions({ barSpacing: Math.max(1, Math.min(80, cur * factor)) });
+  }
+  function scroll(delta: number) {
+    const ts = chartRef.current?.timeScale();
+    if (!ts) return;
+    ts.scrollToPosition((ts.scrollPosition() ?? 0) + delta, true);
+  }
   function onContextMenu(e: React.MouseEvent) {
     e.preventDefault();
     const rect = ref.current?.getBoundingClientRect();
@@ -108,10 +119,19 @@ export function PriceChart({
   const TF = ["1m", "5m", "15m", "1H", "4H", "1D"];
 
   return (
-    <div className="relative h-[360px] w-full" onContextMenu={onContextMenu}>
+    <div className="group relative h-[360px] w-full" onContextMenu={onContextMenu}>
       <div ref={ref} className="h-full w-full" />
       {loading && <div className="absolute inset-0 flex items-center justify-center"><span className="led text-sm text-muted">loading chart…</span></div>}
       {empty && <div className="absolute inset-0 flex items-center justify-center"><span className="led text-sm text-muted">No chart data.</span></div>}
+
+      {/* hover navigation controls (zoom / scroll / reset) */}
+      <div className="pointer-events-none absolute bottom-3 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-lg border border-ink-600 bg-ink-800/90 p-1 opacity-0 shadow-panel backdrop-blur transition group-hover:pointer-events-auto group-hover:opacity-100">
+        <Ctrl title="Zoom out" onClick={() => zoom(1 / 1.3)}>−</Ctrl>
+        <Ctrl title="Zoom in" onClick={() => zoom(1.3)}>+</Ctrl>
+        <Ctrl title="Scroll left" onClick={() => scroll(-8)}>‹</Ctrl>
+        <Ctrl title="Scroll right" onClick={() => scroll(8)}>›</Ctrl>
+        <Ctrl title="Reset view" onClick={() => chartRef.current?.timeScale().fitContent()}>⟲</Ctrl>
+      </div>
 
       {menu && (
         <div
@@ -148,6 +168,14 @@ export function PriceChart({
 function Item({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
     <button onClick={onClick} className="block w-full px-3 py-1.5 text-left text-bone hover:bg-ink-700">
+      {children}
+    </button>
+  );
+}
+
+function Ctrl({ onClick, title, children }: { onClick: () => void; title: string; children: React.ReactNode }) {
+  return (
+    <button title={title} onClick={onClick} className="grid h-7 w-7 place-items-center rounded-md text-base text-muted hover:bg-ink-700 hover:text-bone">
       {children}
     </button>
   );
