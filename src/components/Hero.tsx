@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { StartTradingButton } from "@/components/AuthButton";
 import Image from "next/image";
+import { StartTradingButton } from "@/components/AuthButton";
 
 const ANDROID = "https://play.google.com/store/apps/details?id=xyz.chadwallet.www";
 
@@ -11,43 +10,47 @@ export function Hero() {
   return (
     <section className="space min-h-[100svh] pt-28 sm:pt-32">
       <div className="mx-auto flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
-        <h1 className="giant-wordmark mt-6 text-6xl sm:text-8xl lg:text-9xl">
-          ChadWallet
-        </h1>
+        <h1 className="giant-wordmark mt-6 text-6xl sm:text-8xl lg:text-9xl">ChadWallet</h1>
 
-        <p className="mt-5 font-display text-2xl font-bold text-bone sm:text-4xl">
-          where chads become legends.
-        </p>
+        <p className="mt-5 font-display text-2xl font-bold text-bone sm:text-4xl">where chads become legends.</p>
         <p className="mt-3 max-w-xl text-base text-muted sm:text-lg">
           From memecoins to viral tokens, trade any token on Solana in seconds.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <StartTradingButton className="rounded-xl bg-chad px-7 py-3.5 font-display font-bold text-ink shadow-glow transition hover:bg-chad-glow">Start trading</StartTradingButton>
+          <StartTradingButton className="group flex w-52 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#606AF780] py-3 text-lg font-bold text-white backdrop-blur-md transition-colors duration-150 hover:bg-[#606AF7CC]">
+            <span>Start trading</span>
+            <span className="flex w-0 items-center overflow-hidden opacity-0 transition-all duration-150 ease-out group-hover:w-7 group-hover:opacity-100">
+              <svg viewBox="0 0 24 24" className="ml-2 h-5 w-5 shrink-0 fill-none stroke-current" strokeWidth="2.2">
+                <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </StartTradingButton>
+
           <a
             href={ANDROID}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-glass rounded-xl px-7 py-3.5 font-display font-bold text-bone transition"
+            className="btn-glass w-52 rounded-xl py-3 text-center text-lg font-bold text-bone transition"
           >
             Download app
           </a>
         </div>
 
-        {/* floating brand mark (stands in for fomo's astronaut) */}
-        <div className="relative mt-10 h-56 w-56 sm:h-72 sm:w-72">
-          <div className="absolute inset-0 rounded-full bg-chad/10 blur-3xl" />
+        {/* astronaut */}
+        <div className="relative mt-8 w-full max-w-[560px]">
+          <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-[#606AF7]/15 blur-3xl" />
           <Image
-            src="/brand/chad-head.png"
+            src="/brand/astronaut.webp"
             alt=""
-            width={288}
-            height={288}
+            width={1200}
+            height={1326}
             priority
-            className="animate-floaty relative h-full w-full object-contain drop-shadow-[0_20px_60px_rgba(38,237,128,0.25)]"
+            className="animate-floaty relative h-auto w-full object-contain"
           />
         </div>
 
-        <p className="kicker mt-8 pb-10 text-xs text-chad">Now available on web</p>
+        <p className="kicker -mt-6 pb-10 text-xs text-chad">Now available on web</p>
       </div>
     </section>
   );
