@@ -64,16 +64,16 @@ function StoreBadge({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="btn-glass hidden items-center gap-2 rounded-lg px-3 py-2 transition sm:flex"
+      className="hidden items-center gap-2 rounded-lg border border-white/15 bg-black px-3 py-1.5 transition hover:border-white/30 sm:flex"
     >
-      <svg viewBox="0 0 24 24" className="h-5 w-5 fill-bone" aria-hidden>
+      <svg viewBox="0 0 24 24" className="h-6 w-6 fill-white" aria-hidden>
         {icon}
       </svg>
       <span className="text-left leading-none">
-        <span className="block text-[8px] uppercase tracking-wide text-muted">
+        <span className="block text-[8px] uppercase tracking-wide text-white/70">
           {kicker}
         </span>
-        <span className="block font-display text-xs font-bold text-bone">
+        <span className="block font-display text-sm font-bold text-white">
           {name}
         </span>
       </span>
