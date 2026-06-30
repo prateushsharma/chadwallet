@@ -101,7 +101,6 @@ body {
   background: #02040c;
   overflow: hidden;
 }
-/* starfield */
 .space::before {
   content: "";
   position: absolute;
@@ -177,10 +176,6 @@ body {
     transparent 56%
   );
   filter: blur(5px);
-}
-.space > * {
-  position: relative;
-  z-index: 1;
 }
 
 .giant-wordmark {

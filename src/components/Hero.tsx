@@ -9,8 +9,22 @@ const ANDROID = "https://play.google.com/store/apps/details?id=xyz.chadwallet.ww
 export function Hero() {
   return (
     <section className="space min-h-[100svh] pt-28 sm:pt-32">
-      <div className="earth" aria-hidden />
-      <div className="mx-auto flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
+      {/* real Earth/space backdrop — add public/brand/earth.jpg */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/brand/earth.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </div>
+      {/* legibility overlays */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-black/85 via-black/30 to-transparent" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
         <h1 className="giant-wordmark mt-6 text-6xl sm:text-8xl lg:text-9xl">ChadWallet</h1>
 
         <p className="mt-5 font-display text-2xl font-bold text-bone sm:text-4xl">where chads become legends.</p>
@@ -18,7 +32,8 @@ export function Hero() {
           From memecoins to viral tokens, trade any token on Solana in seconds.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        {/* buttons sit ABOVE the astronaut (z-20) so the satellite tucks behind */}
+        <div className="relative z-20 mt-8 flex flex-wrap items-center justify-center gap-3">
           <StartTradingButton className="group flex w-52 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#606AF780] py-3 text-lg font-bold text-white backdrop-blur-md transition-colors duration-150 hover:bg-[#606AF7CC]">
             <span>Start trading</span>
             <span className="flex w-0 items-center overflow-hidden opacity-0 transition-all duration-150 ease-out group-hover:w-7 group-hover:opacity-100">
@@ -43,20 +58,19 @@ export function Hero() {
           </a>
         </div>
 
-        {/* astronaut */}
-        <div className="relative mt-8 w-full max-w-[560px]">
-          <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-[#606AF7]/15 blur-3xl" />
+        {/* astronaut pulled UP behind the buttons (z-10 < buttons z-20) */}
+        <div className="relative z-10 -mt-16 w-full max-w-[620px] sm:-mt-24">
           <Image
             src="/brand/astronaut.webp"
             alt=""
             width={1200}
             height={1326}
             priority
-            className="animate-floaty relative h-auto w-full object-contain"
+            className="animate-floaty h-auto w-full object-contain"
           />
         </div>
 
-        <p className="kicker -mt-6 pb-10 text-xs text-chad">Now available on web</p>
+        <p className="kicker relative z-10 -mt-10 pb-10 text-xs text-chad">Now available on web</p>
       </div>
     </section>
   );
