@@ -3,23 +3,9 @@
 import React from "react";
 import Image from "next/image";
 
-function PhoneFrame({ src, width = 220 }: { src: string; width?: number }) {
-  return (
-    <div
-      className="relative rounded-[2.2rem] border-[8px] border-[#0d0e13] bg-black shadow-2xl ring-1 ring-white/10"
-      style={{ width }}
-    >
-      <div className="absolute left-1/2 top-2 z-10 h-4 w-16 -translate-x-1/2 rounded-full bg-black" />
-      <div className="overflow-hidden rounded-[1.65rem]">
-        <Image src={src} alt="" width={720} height={1558} className="h-auto w-full" />
-      </div>
-    </div>
-  );
-}
-
 export function Showcase() {
   return (
-    <section className="relative overflow-hidden border-t border-ink-600 bg-ink-900">
+    <section className="relative overflow-hidden bg-ink-900">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
         {/* heading */}
         <div className="text-center">
@@ -35,36 +21,43 @@ export function Showcase() {
 
         {/* device stage */}
         <div className="relative mx-auto mt-16 max-w-5xl">
-          {/* ambient glow around the monitor */}
+          {/* ambient glow */}
           <div className="pointer-events-none absolute -inset-x-20 -inset-y-16 -z-10">
             <div className="h-full w-full rounded-[110px] bg-[#3b4ea0]/35 blur-[130px]" />
           </div>
           <div className="pointer-events-none absolute -inset-6 -z-10">
-            <div className="h-full w-full rounded-[48px] bg-[#606AF7]/20 blur-[70px]" />
+            <div className="h-full w-full rounded-[48px] bg-[#606AF7]/18 blur-[70px]" />
           </div>
 
-          {/* monitor screen — no outline, bezel ~ page bg (no light line) */}
-          <div className="relative overflow-hidden rounded-2xl bg-[#0a0a0d] p-2 shadow-[0_50px_150px_-20px_rgba(0,0,0,0.9)]">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-black">
+          {/* monitor — screenshot only, NO bezel frame (kills the inner line) */}
+          <div className="relative overflow-hidden rounded-2xl bg-black shadow-[0_50px_150px_-20px_rgba(0,0,0,0.9)]">
+            <div className="relative aspect-[16/10]">
               <Image
                 src="/shots/terminal.png"
                 alt="ChadWallet terminal"
                 fill
                 sizes="(max-width: 1024px) 100vw, 1024px"
                 className="object-cover object-top"
+                priority
               />
             </div>
           </div>
-          {/* iMac neck + foot (subtle gradient, like fomo) */}
+          {/* iMac neck + foot (attached, subtle) */}
           <div className="relative z-0 mx-auto h-10 w-28 bg-gradient-to-b from-[#141519] to-[#0b0b0e]" />
-          <div className="relative z-0 mx-auto h-3 w-64 rounded-b-2xl rounded-t-sm bg-gradient-to-b from-[#16171c] to-[#0d0d11]" />
+          <div className="relative z-0 mx-auto h-3 w-64 rounded-b-2xl bg-[#101015]" />
 
-          {/* phone overlapping the screen's right-center — moderate tilt like fomo */}
-          <div className="absolute -bottom-2 right-6 z-20 animate-floaty sm:right-24">
+          {/* phone — a PRE-RENDERED 3D mockup PNG (this is how fomo gets the real look).
+              No CSS frame / no CSS tilt: the device + angle live in the image itself. */}
+          <div className="absolute -bottom-2 right-2 z-20 animate-floaty sm:right-10">
             <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/30 blur-3xl" />
-            <div style={{ transform: "perspective(2000px) rotateY(-13deg) rotateZ(6deg)" }}>
-              <PhoneFrame src="/shots/portfolio.png" width={235} />
-            </div>
+            <Image
+              src="/shots/phone.png"
+              alt="ChadWallet app"
+              width={340}
+              height={700}
+              priority
+              className="h-auto w-[230px] drop-shadow-2xl sm:w-[270px]"
+            />
           </div>
         </div>
       </div>
