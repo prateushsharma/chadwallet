@@ -23,14 +23,14 @@ export function Showcase() {
         <div className="relative mx-auto mt-16 max-w-5xl">
           {/* ambient glow */}
           <div className="pointer-events-none absolute -inset-x-20 -inset-y-16 -z-10">
-            <div className="h-full w-full rounded-[110px] bg-[#3b4ea0]/35 blur-[130px]" />
+            <div className="h-full w-full rounded-[120px] bg-[#3b4ea0]/35 blur-[130px]" />
           </div>
           <div className="pointer-events-none absolute -inset-6 -z-10">
             <div className="h-full w-full rounded-[48px] bg-[#606AF7]/18 blur-[70px]" />
           </div>
 
-          {/* monitor — screenshot only, NO bezel frame (kills the inner line) */}
-          <div className="relative overflow-hidden rounded-2xl bg-black shadow-[0_50px_150px_-20px_rgba(0,0,0,0.9)]">
+          {/* DIRECT trading screenshot — no monitor frame, no stand */}
+          <div className="relative overflow-hidden rounded-2xl shadow-[0_50px_150px_-20px_rgba(0,0,0,0.9)]">
             <div className="relative aspect-[16/10]">
               <Image
                 src="/shots/terminal.png"
@@ -42,21 +42,17 @@ export function Showcase() {
               />
             </div>
           </div>
-          {/* iMac neck + foot (attached, subtle) */}
-          <div className="relative z-0 mx-auto h-10 w-28 bg-gradient-to-b from-[#141519] to-[#0b0b0e]" />
-          <div className="relative z-0 mx-auto h-3 w-64 rounded-b-2xl bg-[#101015]" />
 
-          {/* phone — a PRE-RENDERED 3D mockup PNG (this is how fomo gets the real look).
-              No CSS frame / no CSS tilt: the device + angle live in the image itself. */}
-          <div className="absolute -bottom-2 right-2 z-20 animate-floaty sm:right-10">
-            <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/30 blur-3xl" />
+          {/* BIG tilted phone (3D mockup PNG) overlapping the right of the screen */}
+          <div className="absolute right-2 top-[14%] z-20 animate-floaty sm:right-8">
+            <div className="absolute left-1/2 top-1/2 -z-10 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/30 blur-3xl" />
             <Image
               src="/shots/phone.png"
               alt="ChadWallet app"
-              width={340}
-              height={700}
+              width={420}
+              height={860}
               priority
-              className="h-auto w-[230px] drop-shadow-2xl sm:w-[270px]"
+              className="h-auto w-[230px] drop-shadow-2xl sm:w-[330px]"
             />
           </div>
         </div>
