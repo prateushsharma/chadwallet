@@ -35,9 +35,16 @@ export function Showcase() {
 
         {/* device stage */}
         <div className="relative mx-auto mt-16 max-w-5xl">
-          {/* monitor screen */}
-          <div className="relative rounded-[18px] border border-ink-600 bg-[#0c0c12] p-2.5 shadow-panel">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[10px] bg-black">
+          {/* soft ambient glow around the whole monitor — no hard edges */}
+          <div className="pointer-events-none absolute -inset-x-12 -inset-y-10 -z-10">
+            <div className="h-full w-full rounded-[60px] bg-[#2b3a6b]/25 blur-[100px]" />
+          </div>
+
+          {/* monitor — minimal bezel that melts into the background (no border, no stand) */}
+          <div className="relative rounded-[20px] bg-[#0d0d12] p-3 shadow-[0_60px_160px_-30px_rgba(0,0,0,0.85)]">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[20px] bg-white/[0.06]" />
+            <div className="mx-auto mb-2 h-1 w-1 rounded-full bg-white/15" />
+            <div className="relative aspect-[16/10] overflow-hidden rounded-[12px] bg-black">
               <Image
                 src="/shots/terminal.png"
                 alt="ChadWallet terminal"
@@ -47,17 +54,12 @@ export function Showcase() {
               />
             </div>
           </div>
-          {/* iMac neck + foot */}
-          <div className="mx-auto h-9 w-24 bg-gradient-to-b from-[#1a1b22] to-[#0e0e13]" />
-          <div className="mx-auto h-2.5 w-52 rounded-b-xl rounded-t-sm bg-[#15161c]" />
 
           {/* tilted, floating phone with blue glow */}
-          <div className="absolute -bottom-6 right-0 z-20 animate-floaty sm:-bottom-2 sm:right-6">
-            {/* blue glow behind phone */}
-            <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/30 blur-3xl" />
-            {/* 3D tilt (separate element so the float translateY doesn't override it) */}
+          <div className="absolute -bottom-10 right-0 z-20 animate-floaty sm:right-4">
+            <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/35 blur-3xl" />
             <div style={{ transform: "perspective(1600px) rotateX(6deg) rotateY(-20deg) rotateZ(8deg)" }}>
-              <PhoneFrame src="/shots/portfolio.png" width={220} />
+              <PhoneFrame src="/shots/portfolio.png" width={230} />
             </div>
           </div>
         </div>
