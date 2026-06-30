@@ -21,19 +21,19 @@ export function Navbar({ variant = "overlay" }: { variant?: "overlay" | "solid" 
         </Link>
 
         <div className="flex items-center gap-3">
-          {/* official store badges (white artwork, sit directly on the dark hero) */}
-          <a href={IOS} target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store" className="hidden transition hover:-translate-y-0.5 sm:block">
-            <svg width="120" height="40" className="block">
+          {/* official store badges inside dark pills (like fomo) */}
+          <a href={IOS} target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store" className="hidden h-12 items-center rounded-xl border border-white/12 bg-black/85 px-4 backdrop-blur transition hover:-translate-y-0.5 hover:bg-black sm:flex">
+            <svg width="110" height="34" className="block">
               <use href="/images/sprite.svg#apple-cta" />
             </svg>
           </a>
-          <a href={ANDROID} target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play" className="hidden transition hover:-translate-y-0.5 sm:block">
-            <svg width="135" height="40" className="block">
+          <a href={ANDROID} target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play" className="hidden h-12 items-center rounded-xl border border-white/12 bg-black/85 px-4 backdrop-blur transition hover:-translate-y-0.5 hover:bg-black sm:flex">
+            <svg width="124" height="36" className="block">
               <use href="/images/sprite.svg#google-cta" />
             </svg>
           </a>
 
-          <StartTradingButton className="h-10 rounded-lg px-5 font-bold text-bone ring-1 ring-ink-600 transition bg-ink-800 hover:bg-ink-800/80">
+          <StartTradingButton className="h-12 rounded-xl px-6 font-bold text-bone ring-1 ring-ink-600 transition bg-ink-800 hover:bg-ink-800/80">
             Login
           </StartTradingButton>
         </div>
