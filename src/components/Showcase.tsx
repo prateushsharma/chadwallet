@@ -35,16 +35,16 @@ export function Showcase() {
 
         {/* device stage */}
         <div className="relative mx-auto mt-16 max-w-5xl">
-          {/* ambient glow around the monitor — bold, two layers */}
+          {/* ambient glow around the monitor */}
           <div className="pointer-events-none absolute -inset-x-20 -inset-y-16 -z-10">
-            <div className="h-full w-full rounded-[110px] bg-[#3b4ea0]/40 blur-[130px]" />
+            <div className="h-full w-full rounded-[110px] bg-[#3b4ea0]/35 blur-[130px]" />
           </div>
           <div className="pointer-events-none absolute -inset-6 -z-10">
-            <div className="h-full w-full rounded-[48px] bg-[#606AF7]/25 blur-[70px]" />
+            <div className="h-full w-full rounded-[48px] bg-[#606AF7]/20 blur-[70px]" />
           </div>
 
-          {/* monitor — seamless: thin ring, no border, melts into bg */}
-          <div className="relative overflow-hidden rounded-2xl bg-[#0b0b10] p-2 shadow-[0_50px_150px_-20px_rgba(0,0,0,0.9)] ring-1 ring-white/[0.08]">
+          {/* monitor screen — no outline, bezel ~ page bg (no light line) */}
+          <div className="relative overflow-hidden rounded-2xl bg-[#0a0a0d] p-2 shadow-[0_50px_150px_-20px_rgba(0,0,0,0.9)]">
             <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-black">
               <Image
                 src="/shots/terminal.png"
@@ -55,12 +55,15 @@ export function Showcase() {
               />
             </div>
           </div>
+          {/* iMac neck + foot (subtle gradient, like fomo) */}
+          <div className="relative z-0 mx-auto h-10 w-28 bg-gradient-to-b from-[#141519] to-[#0b0b0e]" />
+          <div className="relative z-0 mx-auto h-3 w-64 rounded-b-2xl rounded-t-sm bg-gradient-to-b from-[#16171c] to-[#0d0d11]" />
 
-          {/* tilted, floating phone with blue glow */}
-          <div className="absolute -bottom-10 right-0 z-20 animate-floaty sm:right-4">
-            <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/35 blur-3xl" />
-            <div style={{ transform: "perspective(1600px) rotateX(6deg) rotateY(-20deg) rotateZ(8deg)" }}>
-              <PhoneFrame src="/shots/portfolio.png" width={230} />
+          {/* phone overlapping the screen's right-center — moderate tilt like fomo */}
+          <div className="absolute -bottom-2 right-6 z-20 animate-floaty sm:right-24">
+            <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/30 blur-3xl" />
+            <div style={{ transform: "perspective(2000px) rotateY(-13deg) rotateZ(6deg)" }}>
+              <PhoneFrame src="/shots/portfolio.png" width={235} />
             </div>
           </div>
         </div>
