@@ -3,16 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { AuthButton } from "./AuthButton";
+import { StartTradingButton } from "./AuthButton";
 
 const ANDROID = "https://play.google.com/store/apps/details?id=xyz.chadwallet.www";
 const IOS = "https://apps.apple.com/us/app/chadwallet/id6757367474";
 
-export function Navbar({
-  variant = "overlay",
-}: {
-  variant?: "overlay" | "solid";
-}) {
+export function Navbar({ variant = "overlay" }: { variant?: "overlay" | "solid" }) {
   const wrap =
     variant === "solid"
       ? "sticky top-0 z-40 border-b border-ink-600 bg-ink-900/85 backdrop-blur"
@@ -24,59 +20,33 @@ export function Navbar({
           <Logo size={30} />
         </Link>
 
-        <div className="flex items-center gap-2.5">
-          <StoreBadge
-            href={IOS}
-            kicker="Download on the"
-            name="App Store"
-            icon={
-              <path d="M16.36 1.43c0 1.14-.42 2.2-1.25 3.04-.99 1-2.13 1.58-3.37 1.48-.15-1.1.4-2.27 1.16-3.03.85-.86 2.3-1.5 3.46-1.49zM20.5 17.2c-.55 1.27-.82 1.84-1.53 2.96-.99 1.57-2.39 3.52-4.12 3.53-1.54.02-1.94-1-4.03-.99-2.09.01-2.53 1.01-4.07.99-1.73-.01-3.06-1.77-4.05-3.34C-.07 15.95-.36 10.8 1.4 8.06c1.25-1.94 3.22-3.08 5.07-3.08 1.89 0 3.07 1.04 4.63 1.04 1.51 0 2.43-1.04 4.62-1.04 1.65 0 3.4.9 4.64 2.46-4.08 2.24-3.42 8.07.14 9.76z" />
-            }
-          />
-          <StoreBadge
-            href={ANDROID}
-            kicker="Get it on"
-            name="Google Play"
-            icon={
-              <path d="M3.6 2.2c-.3.3-.5.8-.5 1.4v16.8c0 .6.2 1.1.5 1.4l.1.1L13 12.6v-.2L3.7 2.1l-.1.1zm12.7 7.1L5.5 3.1l9.3 9.4-.2.2 1.7-1.7zm3.4 1.9-2.4-1.4-1.9 1.9 1.9 1.9 2.4-1.4c.7-.4.7-1.1 0-1.5z" />
-            }
-          />
-          <AuthButton compact />
+        <div className="fomo-top-buttons">
+          <a className="store-badge app-store hidden sm:flex" href={IOS} target="_blank" rel="noopener noreferrer">
+            <svg className="apple-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M16.365 1.43c0 1.14-.416 2.13-1.25 2.98-.897.91-1.876 1.43-2.94 1.35-.13-1.09.39-2.25 1.18-3.05.86-.87 2.05-1.5 3.01-1.28ZM20.66 17.4c-.54 1.25-.8 1.8-1.5 2.9-.97 1.48-2.33 3.33-4.02 3.35-1.5.02-1.88-.98-3.92-.97-2.03.01-2.45 1-3.95.98-1.69-.02-2.98-1.68-3.95-3.16-2.7-4.14-2.98-9-.1-11.58 1.03-.92 2.42-1.5 3.73-1.52 1.47-.03 2.86 1 3.76 1 .9 0 2.58-1.23 4.35-1.05.74.03 2.82.3 4.15 2.25-.1.06-2.48 1.44-2.45 4.37.03 3.5 3.05 4.66 3.9 4.43Z"/>
+            </svg>
+            <span className="badge-text">
+              <span className="badge-small">Download on the</span>
+              <span className="badge-big">App Store</span>
+            </span>
+          </a>
+
+          <a className="store-badge google-play hidden sm:flex" href={ANDROID} target="_blank" rel="noopener noreferrer">
+            <svg className="play-icon" viewBox="0 0 512 512" aria-hidden="true">
+              <path fill="#34A853" d="M99 35c-10 6-16 18-16 34v374c0 16 6 28 16 34l212-221L99 35Z"/>
+              <path fill="#4285F4" d="M99 35l212 221 63-66L126 50c-10-6-20-11-27-15Z"/>
+              <path fill="#FBBC04" d="M311 256 99 477c8-4 17-9 27-15l248-140-63-66Z"/>
+              <path fill="#EA4335" d="M429 225l-55-35-63 66 63 66 55-35c24-14 24-48 0-62Z"/>
+            </svg>
+            <span className="badge-text">
+              <span className="badge-small">GET IT ON</span>
+              <span className="badge-big">Google Play</span>
+            </span>
+          </a>
+
+          <StartTradingButton className="login-pill">Login</StartTradingButton>
         </div>
       </div>
     </header>
-  );
-}
-
-function StoreBadge({
-  href,
-  kicker,
-  name,
-  icon,
-}: {
-  href: string;
-  kicker: string;
-  name: string;
-  icon: React.ReactNode;
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="hidden items-center gap-2 rounded-lg border border-white/15 bg-black px-3 py-1.5 transition hover:border-white/30 sm:flex"
-    >
-      <svg viewBox="0 0 24 24" className="h-6 w-6 fill-white" aria-hidden>
-        {icon}
-      </svg>
-      <span className="text-left leading-none">
-        <span className="block text-[8px] uppercase tracking-wide text-white/70">
-          {kicker}
-        </span>
-        <span className="block font-display text-sm font-bold text-white">
-          {name}
-        </span>
-      </span>
-    </a>
   );
 }
