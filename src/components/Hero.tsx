@@ -9,6 +9,7 @@ const ANDROID = "https://play.google.com/store/apps/details?id=xyz.chadwallet.ww
 export function Hero() {
   return (
     <section className="space min-h-[100svh] pt-28 sm:pt-32">
+      <div className="earth" aria-hidden />
       <div className="mx-auto flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
         <h1 className="giant-wordmark mt-6 text-6xl sm:text-8xl lg:text-9xl">ChadWallet</h1>
 
@@ -31,9 +32,14 @@ export function Hero() {
             href={ANDROID}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-glass w-52 rounded-xl py-3 text-center text-lg font-bold text-bone transition"
+            className="btn-glass group flex w-52 items-center justify-center overflow-hidden rounded-xl py-3 text-lg font-bold text-bone transition"
           >
-            Download app
+            <span className="flex w-0 items-center overflow-hidden opacity-0 transition-all duration-150 ease-out group-hover:w-7 group-hover:opacity-100">
+              <svg viewBox="0 0 24 24" className="mr-2 h-5 w-5 shrink-0 fill-none stroke-current" strokeWidth="2.2">
+                <path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <span>Download app</span>
           </a>
         </div>
 
