@@ -20,22 +20,20 @@ export function Navbar({ variant = "overlay" }: { variant?: "overlay" | "solid" 
           <Logo size={30} />
         </Link>
 
-        <div className="flex items-center gap-3">
-          {/* official store badges inside dark pills (like fomo) */}
-          <a href={IOS} target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store" className="hidden h-12 items-center rounded-xl border border-white/12 bg-black/85 px-4 backdrop-blur transition hover:-translate-y-0.5 hover:bg-black sm:flex">
-            <svg width="110" height="34" className="block">
+        <div className="fomo-top-buttons">
+          {/* your glass spec (.store-badge) wrapping the official sprite logos */}
+          <a href={IOS} target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store" className="store-badge app-store hidden sm:flex">
+            <svg width="118" height="36" className="block">
               <use href="/images/sprite.svg#apple-cta" />
             </svg>
           </a>
-          <a href={ANDROID} target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play" className="hidden h-12 items-center rounded-xl border border-white/12 bg-black/85 px-4 backdrop-blur transition hover:-translate-y-0.5 hover:bg-black sm:flex">
-            <svg width="124" height="36" className="block">
+          <a href={ANDROID} target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play" className="store-badge google-play hidden sm:flex">
+            <svg width="135" height="40" className="block">
               <use href="/images/sprite.svg#google-cta" />
             </svg>
           </a>
 
-          <StartTradingButton className="h-12 rounded-xl px-6 font-bold text-bone ring-1 ring-ink-600 transition bg-ink-800 hover:bg-ink-800/80">
-            Login
-          </StartTradingButton>
+          <StartTradingButton className="login-pill">Login</StartTradingButton>
         </div>
       </div>
     </header>
