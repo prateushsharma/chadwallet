@@ -35,16 +35,17 @@ export function Showcase() {
 
         {/* device stage */}
         <div className="relative mx-auto mt-16 max-w-5xl">
-          {/* soft ambient glow around the whole monitor — no hard edges */}
-          <div className="pointer-events-none absolute -inset-x-12 -inset-y-10 -z-10">
-            <div className="h-full w-full rounded-[60px] bg-[#2b3a6b]/25 blur-[100px]" />
+          {/* ambient glow around the monitor — bold, two layers */}
+          <div className="pointer-events-none absolute -inset-x-20 -inset-y-16 -z-10">
+            <div className="h-full w-full rounded-[110px] bg-[#3b4ea0]/40 blur-[130px]" />
+          </div>
+          <div className="pointer-events-none absolute -inset-6 -z-10">
+            <div className="h-full w-full rounded-[48px] bg-[#606AF7]/25 blur-[70px]" />
           </div>
 
-          {/* monitor — minimal bezel that melts into the background (no border, no stand) */}
-          <div className="relative rounded-[20px] bg-[#0d0d12] p-3 shadow-[0_60px_160px_-30px_rgba(0,0,0,0.85)]">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[20px] bg-white/[0.06]" />
-            <div className="mx-auto mb-2 h-1 w-1 rounded-full bg-white/15" />
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[12px] bg-black">
+          {/* monitor — seamless: thin ring, no border, melts into bg */}
+          <div className="relative overflow-hidden rounded-2xl bg-[#0b0b10] p-2 shadow-[0_50px_150px_-20px_rgba(0,0,0,0.9)] ring-1 ring-white/[0.08]">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-black">
               <Image
                 src="/shots/terminal.png"
                 alt="ChadWallet terminal"
