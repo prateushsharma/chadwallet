@@ -43,16 +43,16 @@ export function Showcase() {
             </div>
           </div>
 
-          {/* tilted phone (3D mockup PNG) — overlaps right of screen, sits LOWER like fomo */}
-          <div className="absolute right-4 top-[30%] z-20 animate-floaty sm:right-10">
-            <div className="absolute left-1/2 top-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/30 blur-3xl" />
+          {/* phone (3D mockup PNG) — anchored to the bottom-right, hangs below the screen like fomo */}
+          <div className="absolute -bottom-20 right-4 z-20 animate-floaty sm:-bottom-24 sm:right-12">
+            <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606AF7]/30 blur-3xl" />
             <Image
               src="/shots/phone.png"
               alt="ChadWallet app"
               width={420}
               height={860}
               priority
-              className="h-auto w-[200px] drop-shadow-2xl sm:w-[280px]"
+              className="h-auto w-[170px] drop-shadow-2xl sm:w-[240px]"
             />
           </div>
         </div>
