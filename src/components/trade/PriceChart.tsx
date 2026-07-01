@@ -16,6 +16,9 @@ export interface ChartHandle {
   setPriceMode(mode: 0 | 1 | 2): void; // 0 normal, 1 log, 2 percent
   setAutoScale(on: boolean): void;
   screenshot(): void;
+  toggleVolume(): boolean;
+  setCrosshairVert(on: boolean): void;
+  getCandles(): Candle[];
 }
 
 // fomo / TradingView dark theme
@@ -35,6 +38,8 @@ export const PriceChart = forwardRef<ChartHandle, {
   const seriesRef = useRef<any>(null);
   const volRef = useRef<any>(null);
   const lastRef = useRef<Candle | null>(null);
+  const candlesRef = useRef<Candle[]>([]);
+  const volHiddenRef = useRef(false);
   const pollRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
   const [empty, setEmpty] = useState(false);
@@ -69,6 +74,15 @@ export const PriceChart = forwardRef<ChartHandle, {
         setTimeout(() => URL.revokeObjectURL(url), 1000);
       });
     },
+    toggleVolume() {
+      volHiddenRef.current = !volHiddenRef.current;
+      volRef.current?.applyOptions({ visible: !volHiddenRef.current });
+      return volHiddenRef.current;
+    },
+    setCrosshairVert(on: boolean) {
+      chartRef.current?.applyOptions({ crosshair: { vertLine: { visible: on } } });
+    },
+    getCandles() { return candlesRef.current; },
   }), []);
 
   useEffect(() => {
@@ -85,6 +99,7 @@ export const PriceChart = forwardRef<ChartHandle, {
       if (disposed || !el.current) return;
       if (!candles.length) { setEmpty(true); setLoading(false); emit(null); return; }
       lastRef.current = candles[candles.length - 1];
+      candlesRef.current = candles;
 
       const chart = createChart(el.current, {
         layout: { background: { type: ColorType.Solid, color: BG }, textColor: "#787B86", fontFamily: "var(--font-sans), ui-sans-serif, system-ui, sans-serif", fontSize: 11 },
@@ -133,6 +148,7 @@ export const PriceChart = forwardRef<ChartHandle, {
             volRef.current?.update({ time: c.time as any, value: c.volume, color: c.close >= c.open ? UP_VOL : DOWN_VOL });
           }
           lastRef.current = cs[cs.length - 1];
+          candlesRef.current = cs;
           emit(lastRef.current);
         } catch { /* keep last good chart */ }
       }, 8000);
