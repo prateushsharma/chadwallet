@@ -180,11 +180,16 @@ export function SwapPanel({
       </div>
 
       {/* About */}
-      <div className="rounded-xl border border-ink-600 p-2 pb-3">
+      <div className="relative mb-6 rounded-xl border border-ink-600 p-2 pb-4">
         <div className="flex flex-col gap-1 px-1">
           <span className="font-medium text-bone">About {sym}</span>
           {s.description ? (
-            <p className={`text-xs leading-tight text-muted ${more ? "" : "line-clamp-2"}`}>{s.description}</p>
+            <div className="flex items-baseline gap-1">
+              <p className={`min-w-0 flex-1 text-xs leading-tight text-muted ${more ? "" : "truncate"}`}>{s.description}</p>
+              <button onClick={() => setMore((v) => !v)} className="shrink-0 text-xs font-bold text-muted hover:text-bone">
+                {more ? "Read less" : "Read more"}
+              </button>
+            </div>
           ) : (
             <p className="text-xs leading-tight text-muted">{token.name} on Solana.</p>
           )}
@@ -222,12 +227,10 @@ export function SwapPanel({
           </div>
         </div>
 
-        <div className="mt-2 flex justify-center">
-          <button onClick={() => setMore((v) => !v)}
-            className="rounded-md bg-ink-700 px-2 py-1 text-xs font-bold text-muted hover:text-bone">
-            {more ? "View less" : "View more"}
-          </button>
-        </div>
+        <button onClick={() => setMore((v) => !v)}
+          className="absolute bottom-0 left-1/2 z-10 flex -translate-x-1/2 translate-y-1/2 items-center gap-1 rounded-md bg-ink-700 px-2 py-1 text-xs font-bold text-muted hover:text-bone">
+          {more ? "View less" : "View more"}
+        </button>
       </div>
 
       {/* Positions */}
@@ -238,7 +241,12 @@ export function SwapPanel({
             <button onClick={() => setPosTab("open")}
               className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 font-bold ${posTab === "open" ? "bg-accent/15 text-accent" : "text-muted"}`}>
               Open
-              {posTab === "open" && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
+              {posTab === "open" && (
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+                </span>
+              )}
             </button>
             <button onClick={() => setPosTab("closed")}
               className={`rounded-md px-1.5 py-0.5 font-bold ${posTab === "closed" ? "bg-ink-600 text-bone" : "text-muted"}`}>
