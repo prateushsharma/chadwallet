@@ -26,6 +26,17 @@ const config: Config = {
         ember: "#FF622E", // sell / down
         mint: "#21C95E", // buy / up
         accent: "#6E5CF7", // fomo indigo — deposit / checks / fees / positions
+        // --- fomo's literal token names (so fomo's class names work verbatim) ---
+        "bg-primary": "rgb(var(--bg-primary) / <alpha-value>)",
+        "bg-secondary": "rgb(var(--bg-secondary) / <alpha-value>)",
+        "bg-tertiary": "rgb(var(--bg-tertiary) / <alpha-value>)",
+        "bg-tertiary-solid": "rgb(var(--bg-tertiary-solid) / <alpha-value>)",
+        "text-primary": "rgb(var(--text-primary) / <alpha-value>)",
+        "text-secondary": "rgb(var(--text-secondary) / <alpha-value>)",
+        "text-tertiary": "rgb(var(--text-tertiary) / <alpha-value>)",
+        green: "var(--green)",
+        red: "var(--red)",
+        "accent-primary": "rgb(var(--accent-primary) / <alpha-value>)",
         // marketing gradient stops (blue -> teal -> mint)
         brandblue: "#2594FF",
         brandteal: "#3FD3D0",

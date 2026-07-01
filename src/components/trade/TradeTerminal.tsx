@@ -101,7 +101,7 @@ export function TradeTerminal() {
   return (
     <TraderProvider>
       <div className="grid h-[calc(100vh-92px)] grid-cols-1 lg:grid-cols-[280px_1fr_330px]">
-        <aside className="hidden min-h-0 overflow-hidden border-r border-ink-600 lg:block">
+        <aside className="hidden min-h-0 overflow-hidden p-2 lg:block">
           <LeftPanel token={selected} tokens={tokens} selected={selected.address} onSelect={pick} />
         </aside>
 

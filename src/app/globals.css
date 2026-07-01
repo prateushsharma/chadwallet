@@ -7,6 +7,18 @@
   --font-display: "Poppins", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
+
+  /* fomo design tokens — used by fomo's literal class names (bg-bg-secondary, text-text-tertiary, …) */
+  --bg-primary: 6 5 16;
+  --bg-secondary: 19 17 32;
+  --bg-tertiary: 38 36 56;
+  --bg-tertiary-solid: 50 47 71;
+  --text-primary: 246 246 251;
+  --text-secondary: 156 155 171;
+  --text-tertiary: 107 106 123;
+  --green: 33 201 94;
+  --red: 255 98 46;
+  --accent-primary: 110 92 247;
 }
 
 html {
