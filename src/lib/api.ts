@@ -1,4 +1,4 @@
-import { Candle, Holder, Token, Trade } from "./types";
+import { Candle, Holder, Token, TokenOverview, Trade } from "./types";
 
 async function getJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -20,7 +20,7 @@ export const api = {
   trending: () =>
     getJSON<{ source: string; tokens: Token[] }>("/api/trending"),
   token: (a: string) =>
-    getJSON<{ source: string; token: Token }>(`/api/token/${a}`),
+    getJSON<{ source: string; token: TokenOverview }>(`/api/token/${a}`),
   holders: (a: string) =>
     getJSON<{ source: string; holders: Holder[] }>(`/api/holders/${a}`),
   trades: (a: string) =>

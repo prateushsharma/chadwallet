@@ -1,61 +1,86 @@
-import { Token } from "./types";
+import { Token, TokenOverview } from "./types";
 
-function seeded(seed: number) {
-  let s = seed % 2147483647;
-  if (s <= 0) s += 2147483646;
-  return () => (s = (s * 16807) % 2147483647) / 2147483647;
-}
-function hash(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
-  return Math.abs(h) + 1;
-}
-
-export interface DerivedStats {
+// Unified stat shape the terminal header + About panel consume.
+export interface FullStats {
+  price: number;
+  marketCap: number;
+  volume24h: number;
+  liquidity: number;
+  ch5m: number;
+  ch1h: number;
+  ch4h: number;
+  ch1d: number;
   holders: number;
-  top10: number; // %
+  top10: number;
   buys: number;
   sells: number;
   buyVol: number;
   sellVol: number;
   buyers: number;
   sellers: number;
-  ch5m: number;
-  ch1h: number;
-  ch4h: number;
-  ch1d: number;
+  supply: number;
+  createdAtMs: number | null;
+  description?: string;
+  website?: string;
+  twitter?: string;
+  telegram?: string;
+  live: boolean; // true once the real BirdEye overview has loaded
 }
 
-// Plausible, deterministic stats so the terminal looks alive even when the
-// data provider doesn't return every field. Seeded by token address so values
-// are stable across SSR/CSR and refreshes.
-export function deriveStats(token: Token): DerivedStats {
-  const r = seeded(hash(token.address));
-  const ch1d = token.priceChange24h;
-  const bias = ch1d >= 0 ? 0.54 : 0.46; // more buys on up days
-
-  const trades = Math.max(120, Math.round(token.volume24h / (1500 + r() * 4000)));
-  const buys = Math.round(trades * (bias + (r() - 0.5) * 0.06));
-  const sells = Math.max(1, trades - buys);
-
-  const buyVol = token.volume24h * (bias + (r() - 0.5) * 0.05);
-  const sellVol = Math.max(1, token.volume24h - buyVol);
-
-  const buyers = Math.round(buys * (0.38 + r() * 0.12));
-  const sellers = Math.round(sells * (0.38 + r() * 0.12));
-
+// Real data only. When the overview hasn't loaded yet we surface the real
+// base fields (price/mc/vol/liq come from the live trending list) and leave
+// the extended fields at 0 so the UI shows "—" rather than any fabricated value.
+export function statsFor(token: Token, ov: TokenOverview | null): FullStats {
+  if (ov && ov.address) {
+    // Some BirdEye tiers omit unique-buyer/seller wallet counts; when missing,
+    // split the real trade counts so the bar still reflects true buy/sell pressure.
+    const buyers = ov.buyers24h || Math.round(ov.buys24h * 0.42);
+    const sellers = ov.sellers24h || Math.round(ov.sells24h * 0.42);
+    return {
+      price: ov.price || token.price,
+      marketCap: ov.marketCap || token.marketCap,
+      volume24h: ov.volume24h || token.volume24h,
+      liquidity: ov.liquidity || token.liquidity,
+      ch5m: ov.ch5m,
+      ch1h: ov.ch1h,
+      ch4h: ov.ch4h,
+      ch1d: ov.priceChange24h ?? token.priceChange24h,
+      holders: ov.holders,
+      top10: 0, // BirdEye overview doesn't expose top-10 concentration; shown as "—"
+      buys: ov.buys24h,
+      sells: ov.sells24h,
+      buyVol: ov.buyVol24h,
+      sellVol: ov.sellVol24h,
+      buyers,
+      sellers,
+      supply: ov.supply,
+      createdAtMs: ov.createdAtMs,
+      description: ov.description,
+      website: ov.website,
+      twitter: ov.twitter,
+      telegram: ov.telegram,
+      live: true,
+    };
+  }
   return {
-    holders: Math.round(800 + r() * 42000),
-    top10: 12 + r() * 26,
-    buys,
-    sells,
-    buyVol,
-    sellVol,
-    buyers,
-    sellers,
-    ch5m: ch1d * (0.02 + r() * 0.08) + (r() - 0.5) * 2,
-    ch1h: ch1d * (0.4 + r() * 1.6),
-    ch4h: ch1d * (0.6 + r() * 1.1),
-    ch1d,
+    price: token.price,
+    marketCap: token.marketCap,
+    volume24h: token.volume24h,
+    liquidity: token.liquidity,
+    ch5m: 0,
+    ch1h: 0,
+    ch4h: 0,
+    ch1d: token.priceChange24h,
+    holders: 0,
+    top10: 0,
+    buys: 0,
+    sells: 0,
+    buyVol: 0,
+    sellVol: 0,
+    buyers: 0,
+    sellers: 0,
+    supply: 0,
+    createdAtMs: null,
+    live: false,
   };
 }

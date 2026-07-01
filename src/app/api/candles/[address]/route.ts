@@ -1,20 +1,18 @@
 import { NextResponse } from "next/server";
 import { fetchCandles, hasBirdeye } from "@/lib/birdeye";
-import { findMock, MOCK_TOKENS, mockCandles } from "@/lib/mock";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET(req: Request, { params }: { params: { address: string } }) {
   const type = new URL(req.url).searchParams.get("type") || "15m";
-  if (hasBirdeye()) {
-    try {
-      const candles = await fetchCandles(params.address, type);
-      if (candles.length) return NextResponse.json({ source: "birdeye", candles });
-    } catch (e) {
-      console.error("[api/candles] fallback:", (e as Error).message);
-    }
+  if (!hasBirdeye())
+    return NextResponse.json({ source: "error", error: "BIRDEYE_API_KEY missing", candles: [] });
+  try {
+    const candles = await fetchCandles(params.address, type);
+    return NextResponse.json({ source: "birdeye", candles });
+  } catch (e) {
+    console.error("[api/candles]", (e as Error).message);
+    return NextResponse.json({ source: "error", error: (e as Error).message, candles: [] });
   }
-  const token = findMock(params.address) ?? MOCK_TOKENS[0];
-  return NextResponse.json({ source: "mock", candles: mockCandles(token) });
 }

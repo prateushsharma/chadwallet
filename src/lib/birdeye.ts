@@ -1,4 +1,4 @@
-import { Candle, Holder, Token, Trade } from "./types";
+import { Candle, Holder, Token, TokenOverview, Trade } from "./types";
 
 const BASE = "https://public-api.birdeye.so";
 const KEY = process.env.BIRDEYE_API_KEY;
@@ -13,8 +13,10 @@ function headers() {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-/* ── global rate limiter: ~1 request/sec to respect the free tier ──────── */
-const MIN_INTERVAL = 1200;
+/* ── global rate limiter ─────────────────────────────────────────────────
+   Premium keys allow much higher throughput than the free tier, so we can
+   pace requests tightly and keep the terminal feeling live.               */
+const MIN_INTERVAL = Number(process.env.BIRDEYE_MIN_INTERVAL_MS ?? 120);
 let lastCall = 0;
 let chain: Promise<void> = Promise.resolve();
 function schedule<T>(fn: () => Promise<T>): Promise<T> {
@@ -44,8 +46,7 @@ async function cached<T>(key: string, ttl: number, fn: () => Promise<T>): Promis
     })
     .catch((e) => {
       inflight.delete(key);
-      // serve stale on error if we have it
-      const stale = cache.get(key);
+      const stale = cache.get(key); // serve last-good on transient error (never mock)
       if (stale) return stale.v as T;
       throw e;
     });
@@ -80,6 +81,16 @@ async function be<T>(path: string, params: Record<string, string | number>): Pro
   return r.json.data as T;
 }
 
+/* pick the first finite number among candidate field names (v3 snake_case vs legacy) */
+function num(...vals: any[]): number {
+  for (const v of vals) {
+    if (v === null || v === undefined) continue;
+    const n = Number(v);
+    if (isFinite(n)) return n;
+  }
+  return 0;
+}
+
 function mapToken(r: any): Token {
   return {
     address: r.address,
@@ -87,16 +98,40 @@ function mapToken(r: any): Token {
     name: r.name ?? r.symbol ?? "Unknown",
     decimals: r.decimals ?? 9,
     logoURI: r.logo_uri ?? r.logoURI ?? r.icon,
-    price: Number(r.price ?? 0),
-    priceChange24h: Number(r.price_change_24h_percent ?? r.priceChange24hPercent ?? r.v24hChangePercent ?? 0),
-    volume24h: Number(r.volume_24h_usd ?? r.v24hUSD ?? r.volume24h ?? 0),
-    liquidity: Number(r.liquidity ?? 0),
-    marketCap: Number(r.market_cap ?? r.marketcap ?? r.mc ?? r.fdv ?? 0),
+    price: num(r.price),
+    priceChange24h: num(r.price_change_24h_percent, r.priceChange24hPercent, r.v24hChangePercent),
+    volume24h: num(r.volume_24h_usd, r.v24hUSD, r.volume24h),
+    liquidity: num(r.liquidity),
+    marketCap: num(r.market_cap, r.marketcap, r.mc, r.real_mc, r.fdv),
+  };
+}
+
+function mapOverview(r: any): TokenOverview {
+  const ext = r.extensions ?? {};
+  return {
+    ...mapToken(r),
+    logoURI: r.logo_uri ?? r.logoURI ?? r.icon ?? ext.logo,
+    ch5m: num(r.price_change_5m_percent, r.priceChange5mPercent, r.price_change_30m_percent, r.priceChange30mPercent),
+    ch1h: num(r.price_change_1h_percent, r.priceChange1hPercent),
+    ch4h: num(r.price_change_4h_percent, r.priceChange4hPercent),
+    buys24h: num(r.buy_24h, r.buy24h, r.trade_24h_buy),
+    sells24h: num(r.sell_24h, r.sell24h, r.trade_24h_sell),
+    buyVol24h: num(r.volume_buy_24h_usd, r.vBuy24hUSD, r.v_buy_24h_usd),
+    sellVol24h: num(r.volume_sell_24h_usd, r.vSell24hUSD, r.v_sell_24h_usd),
+    buyers24h: num(r.unique_wallet_24h_buy, r.uniqueWallet24hBuy, r.unique_buy_24h),
+    sellers24h: num(r.unique_wallet_24h_sell, r.uniqueWallet24hSell, r.unique_sell_24h),
+    holders: num(r.holder, r.holders),
+    supply: num(r.supply, r.total_supply, r.circulating_supply),
+    createdAtMs: r.created_at || r.createdAt ? num(r.created_at, r.createdAt) * 1000 : null,
+    description: ext.description,
+    website: ext.website,
+    twitter: ext.twitter,
+    telegram: ext.telegram,
   };
 }
 
 export async function fetchTrending(limit = 20): Promise<Token[]> {
-  return cached("trending", 60_000, async () => {
+  return cached("trending", 30_000, async () => {
     try {
       const data = await be<{ items?: any[]; tokens?: any[] }>("/defi/v3/token/list", {
         sort_by: "volume_24h_usd", sort_type: "desc", offset: 0, limit, min_liquidity: 5000,
@@ -112,15 +147,15 @@ export async function fetchTrending(limit = 20): Promise<Token[]> {
   });
 }
 
-export async function fetchTokenOverview(address: string): Promise<Token> {
-  return cached(`token:${address}`, 30_000, async () => {
+export async function fetchTokenOverview(address: string): Promise<TokenOverview> {
+  return cached(`token:${address}`, 12_000, async () => {
     const r = await be<any>("/defi/token_overview", { address });
-    return mapToken(r);
+    return mapOverview(r);
   });
 }
 
-export async function fetchHolders(address: string, limit = 20): Promise<Holder[]> {
-  return cached(`holders:${address}`, 45_000, async () => {
+export async function fetchHolders(address: string, limit = 30): Promise<Holder[]> {
+  return cached(`holders:${address}`, 30_000, async () => {
     const data = await be<{ items: any[] }>("/defi/v3/token/holder", { address, offset: 0, limit });
     const items = data.items ?? [];
     const total = items.reduce((s, h) => s + Number(h.ui_amount ?? h.amount ?? 0), 0) || 1;
@@ -133,8 +168,8 @@ export async function fetchHolders(address: string, limit = 20): Promise<Holder[
   });
 }
 
-export async function fetchTrades(address: string, limit = 30): Promise<Trade[]> {
-  return cached(`trades:${address}`, 20_000, async () => {
+export async function fetchTrades(address: string, limit = 40): Promise<Trade[]> {
+  return cached(`trades:${address}`, 8_000, async () => {
     const data = await be<{ items: any[] }>("/defi/txs/token", {
       address, tx_type: "swap", sort_type: "desc", offset: 0, limit,
     });
@@ -161,7 +196,7 @@ const CANDLE_WINDOW: Record<string, number> = {
 };
 
 export async function fetchCandles(address: string, type = "15m"): Promise<Candle[]> {
-  return cached(`candles:${address}:${type}`, 8_000, async () => {
+  return cached(`candles:${address}:${type}`, 6_000, async () => {
     const now = Math.floor(Date.now() / 1000);
     const from = now - (CANDLE_WINDOW[type] ?? 60 * 60 * 24 * 2);
     const data = await be<{ items: any[] }>("/defi/ohlcv", { address, type, time_from: from, time_to: now });
