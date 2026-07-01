@@ -90,7 +90,7 @@ export function ChartArea({ token }: { token: Token }) {
   // capture-phase contextmenu on the pane: intercept BEFORE lightweight-charts' canvas eats it
   useEffect(() => {
     const el = pane.current; if (!el) return;
-    const h = (e: MouseEvent) => { e.preventDefault(); e.stopPropagation(); const r = el.getBoundingClientRect(); setMenu({ x: e.clientX - r.left, y: e.clientY - r.top }); };
+    const h = (e: MouseEvent) => { e.preventDefault(); const r = el.getBoundingClientRect(); setMenu({ x: e.clientX - r.left, y: e.clientY - r.top }); };
     el.addEventListener("contextmenu", h, true);
     return () => el.removeEventListener("contextmenu", h, true);
   }, []);
