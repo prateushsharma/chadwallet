@@ -16,8 +16,8 @@ export default function HomePage() {
         <Navbar variant="overlay" />
         <Hero />
       </div>
-      <FomoCards />
       <Showcase />
+      <FomoCards />
       <Community />
       <Download />
       {/* Bottom rotating token banner */}
