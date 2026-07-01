@@ -206,16 +206,74 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* community section — lavender/purple fallback shown behind community-bg.webp */
-.community {
-  background:
-    radial-gradient(55% 42% at 50% 34%, #201f47 0%, rgba(46, 44, 92, 0.55) 55%, transparent 100%),
-    linear-gradient(180deg, #b4b4d4 0%, #9494bd 42%, #6f6f9c 100%);
+/* ── community: "a trading app for the rest of us" ──
+   Photo lives in its own .community-bg layer and is darkened with filter +
+   a dark-blue ::after overlay, so the rings and text stay crisp. */
+.community-section {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #06082a;
 }
-/* orbit-ring rotation (inner spins reverse, outer forward) */
-@keyframes spin { to { transform: rotate(360deg); } }
-.animate-spin-inner { animation: spin 30s linear infinite reverse; }
-.animate-spin-outer { animation: spin 45s linear infinite; }
+.community-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/landing/community-bg.webp");
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  /* this is what makes it dark like the original */
+  filter: brightness(0.48) saturate(0.9);
+  opacity: 0.92;
+  z-index: 0;
+}
+.community-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* dark blue overlay like fomo */
+  background:
+    radial-gradient(circle at center, rgba(32, 36, 118, 0.35) 0%, rgba(5, 7, 36, 0.72) 68%, rgba(2, 3, 18, 0.92) 100%),
+    linear-gradient(to bottom, rgba(9, 12, 58, 0.78), rgba(4, 5, 25, 0.92));
+}
+.circle-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 980px;
+  height: 980px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+}
+.outer-circle {
+  background-image: url("/images/landing/outer-circle.webp");
+  animation: rotateClockwise 70s linear infinite;
+}
+.inner-circle {
+  width: 760px;
+  height: 760px;
+  background-image: url("/images/landing/inner-circle.webp");
+  animation: rotateAntiClockwise 55s linear infinite;
+}
+.community-content { position: relative; z-index: 3; }
+@keyframes rotateClockwise {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes rotateAntiClockwise {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+@media (max-width: 768px) {
+  .circle-layer { width: 720px; height: 720px; }
+  .inner-circle { width: 560px; height: 560px; }
+}
 @keyframes orbit {
   from { transform: rotate(0deg) translateX(var(--r)) rotate(0deg); }
   to { transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); }
