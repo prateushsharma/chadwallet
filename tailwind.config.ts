@@ -5,26 +5,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // ChadWallet palette — sampled from the real app + brand kit
+        // ChadWallet palette — matched to fomo.family (bg #060510 confirmed from their site)
         ink: {
-          DEFAULT: "#0A0A0D", // neutral near-black (fomo-like)
-          900: "#0A0A0D",
-          800: "#101014",
-          700: "#16161C",
-          600: "#20212A", // borders
-          500: "#2B2C36", // dividers / scrollbar
+          DEFAULT: "#060510", // bg-primary (page) — deep blue-black
+          900: "#060510", // bg-primary
+          800: "#131120", // bg-secondary — cards / inputs / buttons (clearly lifted)
+          700: "#1C1A2B", // hover mid
+          600: "#262438", // bg-tertiary — borders / hover / active chips
+          500: "#322F47", // lighter divider
         },
-        bone: "#EDEFF3", // near-white text
-        muted: "#888B96", // neutral grey secondary text
+        bone: "#F6F6FB", // text-primary (near-white)
+        muted: "#9C9BAB", // text-secondary
+        dim: "#6B6A7B", // text-tertiary (placeholders, "$", muted icons)
         chad: {
-          DEFAULT: "#26ED80", // brand green (Buy pill)
-          dim: "#1FBE67",
-          glow: "#5BFFA6",
+          DEFAULT: "#40DF88", // brand green (Buy)
+          dim: "#28B368",
+          glow: "#6BFFB0",
         },
-        sol: "#14F195", // Solana green accent (active states)
-        ember: "#FF622E", // sell / down (fomo)
-        mint: "#26ED80", // buy / up
-        accent: "#606AF7", // fomo indigo — deposit / checks / fees / positions
+        sol: "#14F195", // Solana green accent
+        ember: "#FF622E", // sell / down
+        mint: "#40DF88", // buy / up
+        accent: "#6E5CF7", // fomo indigo — deposit / checks / fees / positions
         // marketing gradient stops (blue -> teal -> mint)
         brandblue: "#2594FF",
         brandteal: "#3FD3D0",
@@ -36,7 +37,7 @@ const config: Config = {
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(38,237,128,0.25), 0 0 36px -8px rgba(38,237,128,0.5)",
+        glow: "0 0 0 1px rgba(64,223,136,0.25), 0 0 36px -8px rgba(64,223,136,0.5)",
         panel: "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 24px 70px -34px rgba(0,0,0,0.95)",
       },
       animation: {
