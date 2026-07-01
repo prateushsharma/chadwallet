@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Token } from "@/lib/types";
 import { fmtUsd } from "@/lib/format";
 import { PriceChart, OHLC } from "./PriceChart";
@@ -11,6 +11,15 @@ export function ChartArea({ token }: { token: Token }) {
   const [tf, setTf] = useState("15m");
   const [hover, setHover] = useState<OHLC | null>(null);
   const up = token.priceChange24h >= 0;
+
+  // client-only clock (avoids SSR/CSR hydration mismatch) that also ticks live
+  const [clock, setClock] = useState("");
+  useEffect(() => {
+    const tick = () => setClock(new Date().toUTCString().slice(17, 25));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const o = hover?.open, h = hover?.high, l = hover?.low, c = hover?.close;
 
@@ -66,7 +75,7 @@ export function ChartArea({ token }: { token: Token }) {
             {t}
           </button>
         ))}
-        <span className="led ml-auto text-muted">{new Date().toUTCString().slice(17, 25)} UTC</span>
+        <span className="led ml-auto text-muted">{clock || "--:--:--"} UTC</span>
       </div>
 
       {/* overlays */}

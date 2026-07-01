@@ -103,7 +103,7 @@ export function PriceChart({
           setLive(true);
           setTimeout(() => { if (!disposed) setLive(false); }, 1400);
         } catch { /* keep last good chart */ }
-      }, 12000);
+      }, 8000);
 
       ro = new ResizeObserver(() => {
         if (ref.current && chart) chart.applyOptions({ width: ref.current.clientWidth, height: ref.current.clientHeight });

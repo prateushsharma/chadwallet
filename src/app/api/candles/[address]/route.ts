@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { fetchCandles, hasBirdeye } from "@/lib/birdeye";
 import { findMock, MOCK_TOKENS, mockCandles } from "@/lib/mock";
 
-export const revalidate = 20;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(req: Request, { params }: { params: { address: string } }) {
   const type = new URL(req.url).searchParams.get("type") || "15m";

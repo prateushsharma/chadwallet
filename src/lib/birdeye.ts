@@ -161,7 +161,7 @@ const CANDLE_WINDOW: Record<string, number> = {
 };
 
 export async function fetchCandles(address: string, type = "15m"): Promise<Candle[]> {
-  return cached(`candles:${address}:${type}`, 30_000, async () => {
+  return cached(`candles:${address}:${type}`, 8_000, async () => {
     const now = Math.floor(Date.now() / 1000);
     const from = now - (CANDLE_WINDOW[type] ?? 60 * 60 * 24 * 2);
     const data = await be<{ items: any[] }>("/defi/ohlcv", { address, type, time_from: from, time_to: now });
