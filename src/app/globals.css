@@ -306,3 +306,13 @@ body {
 .bg-linear-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
 .bg-linear-to-t { background-image: linear-gradient(to top, var(--tw-gradient-stops)); }
 .bg-linear-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); }
+
+/* fomo swap-card utilities */
+.hover-scrim { position: relative; }
+.hover-scrim::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: rgba(255, 255, 255, 0.06); opacity: 0; transition: opacity 0.15s ease; pointer-events: none;
+}
+.hover-scrim:hover::after { opacity: 1; }
+@keyframes flip-up { 0% { transform: translateY(65%); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+.animate-flip-up { animation: flip-up 0.3s ease-out; }

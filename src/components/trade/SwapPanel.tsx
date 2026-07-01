@@ -97,85 +97,86 @@ export function SwapPanel({
 
   return (
     <div className="scroll-thin flex h-full flex-col gap-4 overflow-y-auto p-4">
-      {/* Buy / Sell card — fomo structure */}
-      <div className="flex flex-col gap-2 rounded-2xl border border-ink-600 p-2">
-        {/* toggle */}
-        <div className="flex gap-2">
-          <button type="button" onClick={() => setSide("buy")}
-            className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "buy" ? "bg-mint/15 text-mint" : "bg-ink-800 text-muted hover:bg-ink-700"}`}>
-            Buy
-          </button>
-          <button type="button" onClick={() => setSide("sell")}
-            className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "sell" ? "bg-ember/15 text-ember" : "bg-ink-800 text-muted hover:bg-ink-700"}`}>
-            Sell
-          </button>
-        </div>
-
-        {/* amount */}
-        <div className="relative flex cursor-text items-stretch gap-px rounded-xl border border-transparent bg-ink-800 text-3xl focus-within:border-ink-600">
-          <div className="flex min-w-0 flex-1 items-center gap-px p-4 pr-0">
-            <div className="text-dim">$</div>
-            <input value={usd} onChange={(e) => setUsd(e.target.value)} placeholder="0" inputMode="decimal"
-              className="min-w-0 flex-1 bg-transparent text-bone outline-none placeholder:text-dim" />
+      {/* Buy / Sell card — fomo verbatim */}
+      <div className="flex flex-col">
+        <div className="flex flex-col gap-2 rounded-2xl border border-bg-tertiary p-2">
+          {/* toggle */}
+          <div className="flex gap-2">
+            <button type="button" onClick={() => setSide("buy")}
+              className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "buy" ? "bg-green-transparent text-green" : "bg-bg-secondary text-text-secondary hover:bg-bg-tertiary"}`}>
+              Buy
+            </button>
+            <button type="button" onClick={() => setSide("sell")}
+              className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "sell" ? "bg-red-transparent text-red" : "bg-bg-secondary text-text-secondary hover:bg-bg-tertiary"}`}>
+              Sell
+            </button>
           </div>
-          <div className="relative flex shrink-0 flex-col items-end justify-center p-4 pl-6">
-            <div className="text-sm font-medium text-dim">
-              {usd ? (loading ? "…" : recv !== null ? `≈ ${fmtNum(recv, recv < 1000)} ${sym}` : "USD") : "Enter amount"}
+
+          {/* amount */}
+          <div className="relative flex cursor-text items-stretch gap-px rounded-xl border border-transparent bg-bg-secondary text-3xl focus-within:border-bg-tertiary">
+            <div className="flex min-w-0 flex-1 items-center gap-px p-4 pr-0">
+              <div className="text-text-tertiary">$</div>
+              <input value={usd} onChange={(e) => setUsd(e.target.value)} placeholder="0" inputMode="decimal"
+                className="min-w-0 flex-1 bg-transparent text-text-primary outline-none placeholder:text-text-tertiary" />
+            </div>
+            <div className="relative flex shrink-0 cursor-pointer flex-col items-end justify-center p-4 pl-6">
+              <div className="text-sm font-medium text-text-tertiary">
+                {usd ? (loading ? "…" : recv !== null ? `≈ ${fmtNum(recv, recv < 1000)} ${sym}` : "USD") : "Enter amount"}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* quick amounts + settings */}
-        <div className="flex gap-1">
-          <div className="grid flex-1 grid-cols-4 gap-2">
-            {quick.map((q) => (
-              <button key={q} type="button" onClick={() => setUsd(q.replace("$", ""))}
-                className="h-8 rounded-lg bg-ink-800 px-3 text-sm font-bold text-bone hover:brightness-125">
-                {q}
-              </button>
-            ))}
+          {/* quick + settings */}
+          <div className="flex gap-1">
+            <div className="grid flex-1 grid-cols-4 gap-2">
+              {quick.map((q) => (
+                <button key={q} type="button" onClick={() => setUsd(q.replace("$", ""))}
+                  className="hover-scrim h-8 rounded-lg bg-bg-secondary px-3 text-sm font-bold text-text-primary" translate="no">
+                  {q}
+                </button>
+              ))}
+            </div>
+            <button type="button" title="Settings"
+              className="flex h-8 w-8 shrink-0 items-center justify-center text-text-tertiary transition-colors hover:text-text-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-settings" aria-hidden="true">
+                <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
           </div>
-          <button type="button" title="Slippage settings"
-            className="flex h-8 w-8 shrink-0 items-center justify-center text-dim transition-colors hover:text-muted">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
+
+          {/* available */}
+          <div className="flex flex-col px-2 text-sm">
+            <div className="flex items-center justify-between">
+              <div className="text-text-secondary"><span translate="no">{fmtUsd(DEMO_BALANCE)} available</span></div>
+            </div>
+          </div>
+
+          {/* action */}
+          <button type="button" onClick={execute} disabled={!usd || loading || !token.price}
+            className={`h-11 overflow-hidden rounded-xl px-4 py-2 text-base font-bold ${
+              !usd || loading || !token.price
+                ? "cursor-not-allowed border border-bg-tertiary/60 bg-bg-secondary text-text-secondary"
+                : side === "buy"
+                ? "bg-green text-bg-primary hover:brightness-110"
+                : "bg-red text-bg-primary hover:brightness-110"
+            }`}>
+            <span key={`${side}-${sym}`} className="inline-block animate-flip-up">{side === "buy" ? `Buy ${sym}` : `Sell ${sym}`}</span>
           </button>
-        </div>
 
-        {/* available */}
-        <div className="flex flex-col px-2 text-sm">
-          <div className="flex items-center justify-between">
-            <div className="text-muted"><span>{fmtUsd(DEMO_BALANCE)} available</span></div>
+          {/* fee row */}
+          <div className="flex items-center justify-between gap-2 px-2 py-1">
+            <div className="flex items-center gap-2">
+              <svg className="size-3 text-accent-primary"><use href="/images/sprite.svg#tag" /></svg>
+              <span className="text-xs font-bold text-accent-primary">Lowest fees: 0.05%</span>
+            </div>
+            <svg className="size-3.5 text-text-tertiary"><use href="/images/sprite.svg#info" /></svg>
           </div>
         </div>
-
-        {/* buy button */}
-        <button type="button" onClick={execute} disabled={!usd || loading || !token.price}
-          className={`h-11 overflow-hidden rounded-xl px-4 py-2 text-base font-bold transition-colors ${
-            !usd || loading || !token.price
-              ? "cursor-not-allowed border border-ink-600/60 bg-ink-800 text-muted"
-              : side === "buy"
-              ? "bg-mint text-ink hover:brightness-110"
-              : "bg-ember text-ink hover:brightness-110"
-          }`}>
-          <span className="inline-block">{side === "buy" ? `Buy ${sym}` : `Sell ${sym}`}</span>
-        </button>
-
-        {/* fee row — tag + info */}
-        <div className="flex items-center justify-between px-2 py-1">
-          <div className="flex items-center gap-2">
-            <svg viewBox="0 0 24 24" className="h-3 w-3 fill-none stroke-accent" strokeWidth="2">
-              <path d="M20.59 13.41L13.42 20.6a2 2 0 01-2.83 0L3 13V3h10l7.59 7.59a2 2 0 010 2.82z" strokeLinejoin="round" />
-              <circle cx="7.5" cy="7.5" r="1.4" className="fill-accent stroke-none" />
-            </svg>
-            <span className="text-xs font-bold text-accent">Lowest fees: 0.05%</span>
-          </div>
-          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-dim" strokeWidth="2">
-            <circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" strokeLinecap="round" />
-          </svg>
+        {/* fomo keeps an empty collapsible expansion after the card */}
+        <div className="mt-0 grid grid-rows-[0fr] transition-[grid-template-rows,margin-top] duration-300 ease-out">
+          <div className="min-h-0 overflow-hidden" />
         </div>
       </div>
 

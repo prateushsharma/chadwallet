@@ -37,8 +37,10 @@ const config: Config = {
         "text-primary": "rgb(var(--text-primary) / <alpha-value>)",
         "text-secondary": "rgb(var(--text-secondary) / <alpha-value>)",
         "text-tertiary": "rgb(var(--text-tertiary) / <alpha-value>)",
-        green: "var(--green)",
-        red: "var(--red)",
+        green: "rgb(var(--green) / <alpha-value>)",
+        red: "rgb(var(--red) / <alpha-value>)",
+        "green-transparent": "rgba(33, 201, 94, 0.15)",
+        "red-transparent": "rgba(255, 98, 46, 0.15)",
         "accent-primary": "rgb(var(--accent-primary) / <alpha-value>)",
         // marketing gradient stops (blue -> teal -> mint)
         brandblue: "#2594FF",

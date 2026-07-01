@@ -67,4 +67,12 @@
   <symbol id="star-empty" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9z"/>
   </symbol>
+  <symbol id="tag" viewBox="0 0 24 24">
+    <path fill="currentColor" fill-rule="evenodd" d="M3 3h10l7.6 7.6a2 2 0 0 1 0 2.8L12 22l-9-9V3Zm4.5 2.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/>
+  </symbol>
+  <symbol id="info" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 11v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="12" cy="7.6" r="1.1" fill="currentColor"/>
+  </symbol>
 </svg>
