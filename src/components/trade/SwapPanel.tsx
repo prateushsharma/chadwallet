@@ -19,11 +19,11 @@ interface Position {
 
 export function SwapPanel({
   token,
-  overview,
+  overview = null,
   solPriceUsd,
 }: {
   token: Token;
-  overview: TokenOverview | null;
+  overview?: TokenOverview | null;
   solPriceUsd: number;
 }) {
   const [side, setSide] = useState<"buy" | "sell">("buy");
@@ -97,59 +97,86 @@ export function SwapPanel({
 
   return (
     <div className="scroll-thin flex h-full flex-col gap-4 overflow-y-auto p-4">
-      {/* Buy / Sell */}
-      <div className="grid grid-cols-2 gap-1 rounded-xl border border-ink-600 bg-ink-900 p-1">
-        <button onClick={() => setSide("buy")}
-          className={`rounded-lg py-2.5 text-sm font-bold transition ${side === "buy" ? "bg-mint/15 text-mint" : "text-muted hover:text-bone"}`}>
-          Buy
-        </button>
-        <button onClick={() => setSide("sell")}
-          className={`rounded-lg py-2.5 text-sm font-bold transition ${side === "sell" ? "bg-ember/15 text-ember" : "text-muted hover:text-bone"}`}>
-          Sell
-        </button>
-      </div>
+      {/* Buy / Sell card — fomo structure */}
+      <div className="flex flex-col gap-2 rounded-2xl border border-ink-600 p-2">
+        {/* toggle */}
+        <div className="flex gap-2">
+          <button type="button" onClick={() => setSide("buy")}
+            className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "buy" ? "bg-mint/15 text-mint" : "bg-ink-800 text-muted hover:bg-ink-700"}`}>
+            Buy
+          </button>
+          <button type="button" onClick={() => setSide("sell")}
+            className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "sell" ? "bg-ember/15 text-ember" : "bg-ink-800 text-muted hover:bg-ink-700"}`}>
+            Sell
+          </button>
+        </div>
 
-      {/* Amount */}
-      <div className="flex items-stretch rounded-xl border border-transparent bg-ink-900 focus-within:border-ink-600">
-        <div className="flex flex-1 items-center gap-1 p-4 pr-0">
-          <span className="text-3xl text-muted">$</span>
-          <input type="number" value={usd} onChange={(e) => setUsd(e.target.value)} placeholder="0" min="0" step="any"
-            className="led w-full min-w-0 bg-transparent text-3xl font-bold text-bone outline-none placeholder:text-muted" />
+        {/* amount */}
+        <div className="relative flex cursor-text items-stretch gap-px rounded-xl border border-transparent bg-ink-800 text-3xl focus-within:border-ink-600">
+          <div className="flex min-w-0 flex-1 items-center gap-px p-4 pr-0">
+            <div className="text-muted">$</div>
+            <input value={usd} onChange={(e) => setUsd(e.target.value)} placeholder="0" inputMode="decimal"
+              className="led min-w-0 flex-1 bg-transparent font-bold text-bone outline-none placeholder:text-muted" />
+          </div>
+          <div className="relative flex shrink-0 flex-col items-end justify-center p-4 pl-6">
+            <div className="text-sm font-medium text-muted">
+              {usd ? (loading ? "…" : recv !== null ? `≈ ${fmtNum(recv, recv < 1000)} ${sym}` : "USD") : "Enter amount"}
+            </div>
+          </div>
         </div>
-        <div className="flex shrink-0 flex-col items-end justify-center p-4">
-          <span className="led text-xs text-muted">
-            {usd ? (loading ? "…" : recv !== null ? `≈ ${fmtNum(recv, recv < 1000)} ${sym}` : "USD") : "Enter amount"}
-          </span>
-        </div>
-      </div>
 
-      {/* quick + settings */}
-      <div className="flex gap-1">
-        <div className="grid flex-1 grid-cols-4 gap-2">
-          {quick.map((q) => (
-            <button key={q} onClick={() => setUsd(q.replace("$", ""))}
-              className="led h-8 rounded-lg bg-ink-800 px-3 text-sm font-bold text-bone hover:brightness-125">
-              {q}
-            </button>
-          ))}
+        {/* quick amounts + settings */}
+        <div className="flex gap-1">
+          <div className="grid flex-1 grid-cols-4 gap-2">
+            {quick.map((q) => (
+              <button key={q} type="button" onClick={() => setUsd(q.replace("$", ""))}
+                className="led h-8 rounded-lg bg-ink-800 px-3 text-sm font-bold text-bone hover:brightness-125">
+                {q}
+              </button>
+            ))}
+          </div>
+          <button type="button" title="Slippage settings"
+            className="flex h-8 w-8 shrink-0 items-center justify-center text-muted transition-colors hover:text-bone">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
         </div>
-        <button className="grid h-8 w-8 shrink-0 place-items-center text-muted hover:text-bone" title="Slippage settings">
-          <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth="2">
-            <circle cx="12" cy="12" r="3" /><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" strokeLinecap="round" />
+
+        {/* available */}
+        <div className="flex flex-col px-2 text-sm">
+          <div className="flex items-center justify-between">
+            <div className="text-muted"><span className="led">{fmtUsd(DEMO_BALANCE)} available</span></div>
+          </div>
+        </div>
+
+        {/* buy button */}
+        <button type="button" onClick={execute} disabled={!usd || loading || !token.price}
+          className={`h-11 overflow-hidden rounded-xl px-4 py-2 text-base font-bold transition-colors ${
+            !usd || loading || !token.price
+              ? "cursor-not-allowed border border-ink-600/60 bg-ink-800 text-muted"
+              : side === "buy"
+              ? "bg-mint text-ink hover:brightness-110"
+              : "bg-ember text-ink hover:brightness-110"
+          }`}>
+          <span className="inline-block">{side === "buy" ? `Buy ${sym}` : `Sell ${sym}`}</span>
+        </button>
+
+        {/* fee row — tag + info */}
+        <div className="flex items-center justify-between px-2 py-1">
+          <div className="flex items-center gap-2">
+            <svg viewBox="0 0 24 24" className="h-3 w-3 fill-none stroke-accent" strokeWidth="2">
+              <path d="M20.59 13.41L13.42 20.6a2 2 0 01-2.83 0L3 13V3h10l7.59 7.59a2 2 0 010 2.82z" strokeLinejoin="round" />
+              <circle cx="7.5" cy="7.5" r="1.4" className="fill-accent stroke-none" />
+            </svg>
+            <span className="text-xs font-bold text-accent">Lowest fees: 0.05%</span>
+          </div>
+          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-muted" strokeWidth="2">
+            <circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" strokeLinecap="round" />
           </svg>
-        </button>
-      </div>
-
-      <p className="led px-2 text-xs text-muted">{fmtUsd(DEMO_BALANCE)} available</p>
-
-      <button onClick={execute} disabled={!usd || loading || !token.price}
-        className={`rounded-xl py-3 font-display text-base font-bold transition disabled:cursor-not-allowed disabled:bg-ink-800 disabled:text-muted ${side === "buy" ? "bg-mint text-ink hover:brightness-110" : "bg-ember text-ink hover:brightness-110"}`}>
-        {side === "buy" ? `Buy ${sym}` : `Sell ${sym}`}
-      </button>
-
-      <div className="flex items-center justify-between px-2">
-        <span className="flex items-center gap-1 text-xs font-bold text-accent">◈ Lowest fees: 0.05%</span>
-        <span className="text-xs text-muted">ⓘ</span>
+        </div>
       </div>
 
       {/* About */}
