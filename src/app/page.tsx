@@ -4,7 +4,7 @@ import { Hero } from "@/components/Hero";
 import { Showcase } from "@/components/Showcase";
 import { FomoCards } from "@/components/FomoCards";
 import { Community } from "@/components/Community";
-import { Download, Footer } from "@/components/Download";
+import { Footer } from "@/components/Download";
 
 export default function HomePage() {
   return (
@@ -19,7 +19,6 @@ export default function HomePage() {
       <Showcase />
       <FomoCards />
       <Community />
-      <Download />
       {/* Bottom rotating token banner */}
       <TokenBanner reverse speed={52} />
       <Footer />
