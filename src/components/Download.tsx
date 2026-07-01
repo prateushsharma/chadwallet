@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Logo } from "./Logo";
+import { Glyph } from "./Logo";
 
 const ANDROID = "https://play.google.com/store/apps/details?id=xyz.chadwallet.www";
 const IOS = "https://apps.apple.com/us/app/chadwallet/id6757367474";
@@ -84,34 +84,91 @@ function StoreButton({
   );
 }
 
-export function Footer() {
+function FooterCol({
+  label,
+  links,
+}: {
+  label: string;
+  links: { name: string; href: string; external?: boolean }[];
+}) {
   return (
-    <footer className="border-t border-ink-600 bg-ink-900">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <div>
-          <Logo />
-          <p className="mt-3 max-w-xs text-sm text-muted">
-            Self-custody Solana trading. Built for degens with discipline.
-          </p>
+    <div className="flex min-w-40 flex-col items-start gap-2">
+      <div className="font-mono text-sm text-muted/70">{label}</div>
+      {links.map((l) => (
+        <a
+          key={l.name}
+          href={l.href}
+          {...(l.external
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
+          className="text-sm text-bone/80 transition hover:text-bone"
+        >
+          {l.name}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+export function Footer() {
+  const year = new Date().getFullYear();
+  const copyright = `© ${year} ChadWallet`;
+
+  return (
+    <footer className="border-t border-ink-600 bg-ink-900 px-6 py-16 sm:px-12">
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-10 sm:flex-row">
+        {/* brand + tagline */}
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/"
+              aria-label="ChadWallet home"
+              className="inline-flex items-center gap-2.5 text-bone"
+            >
+              <Glyph size={32} />
+              <span className="font-display text-3xl font-extrabold tracking-tight text-bone">
+                ChadWallet
+              </span>
+            </Link>
+            <div className="text-2xl leading-7 tracking-tighter text-muted">
+              where traders become legends.
+            </div>
+          </div>
+          <div className="hidden text-sm text-muted/60 sm:block">{copyright}</div>
         </div>
-        <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted">
-          <Link href="/trade" className="hover:text-bone">
-            Terminal
-          </Link>
-          <a href="#features" className="hover:text-bone">
-            Features
-          </a>
-          <a href={ANDROID} className="hover:text-bone">
-            Android
-          </a>
-          <a href={IOS} className="hover:text-bone">
-            iOS
-          </a>
+
+        {/* link columns */}
+        <div className="flex flex-col items-start gap-8 sm:flex-row sm:gap-2">
+          <FooterCol
+            label="PRODUCT"
+            links={[
+              { name: "Terminal", href: "/trade" },
+              { name: "Features", href: "#features" },
+              { name: "Download", href: "#download" },
+              { name: "FAQ", href: "#" },
+            ]}
+          />
+          <FooterCol
+            label="SOCIAL"
+            links={[
+              { name: "Discord", href: "#", external: true },
+              { name: "X/Twitter", href: "#", external: true },
+              { name: "Instagram", href: "#", external: true },
+              { name: "Youtube", href: "#", external: true },
+              { name: "LinkedIn", href: "#", external: true },
+            ]}
+          />
+          <FooterCol
+            label="LEGAL"
+            links={[
+              { name: "Privacy Policy", href: "#" },
+              { name: "Terms of Service", href: "#" },
+            ]}
+          />
         </div>
-      </div>
-      <div className="border-t border-ink-700 px-4 py-4 text-center text-xs text-muted sm:px-6">
-        © {new Date().getFullYear()} ChadWallet · Not financial advice · Trade
-        responsibly
+
+        {/* mobile copyright */}
+        <div className="block text-sm text-muted/60 sm:hidden">{copyright}</div>
       </div>
     </footer>
   );
