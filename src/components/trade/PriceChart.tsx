@@ -21,8 +21,11 @@ export function PriceChart({
   const chartRef = useRef<any>(null);
   const seriesRef = useRef<any>(null);
   const lastRef = useRef<Candle | null>(null);
+  const volRef = useRef<any>(null);
+  const pollRef = useRef<any>(null);
   const logRef = useRef(false);
   const [loading, setLoading] = useState(true);
+  const [live, setLive] = useState(false);
   const [empty, setEmpty] = useState(false);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
 
@@ -70,6 +73,7 @@ export function PriceChart({
       const vol = chart.addHistogramSeries({ priceFormat: { type: "volume" }, priceScaleId: "vol" });
       chart.priceScale("vol").applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
       vol.setData(candles.map((c) => ({ time: c.time as any, value: c.volume, color: c.close >= c.open ? "rgba(38,237,128,0.3)" : "rgba(255,92,92,0.3)" })));
+      volRef.current = vol;
 
       chart.timeScale().fitContent();
       setLoading(false);
@@ -82,6 +86,25 @@ export function PriceChart({
         else onHover(lastRef.current as any);
       });
 
+      // live: poll latest candles and update the forming bar (+ append new bars)
+      pollRef.current = setInterval(async () => {
+        if (disposed) return;
+        try {
+          const r = await api.candles(address, timeframe);
+          const cs: Candle[] = r.candles ?? [];
+          if (!cs.length) return;
+          const since = lastRef.current?.time ?? 0;
+          for (const c of cs) {
+            if (c.time < since) continue; // keep updates in ascending time order
+            series.update({ time: c.time as any, open: c.open, high: c.high, low: c.low, close: c.close });
+            volRef.current?.update({ time: c.time as any, value: c.volume, color: c.close >= c.open ? "rgba(38,237,128,0.3)" : "rgba(255,92,92,0.3)" });
+          }
+          lastRef.current = cs[cs.length - 1];
+          setLive(true);
+          setTimeout(() => { if (!disposed) setLive(false); }, 1400);
+        } catch { /* keep last good chart */ }
+      }, 12000);
+
       ro = new ResizeObserver(() => {
         if (ref.current && chart) chart.applyOptions({ width: ref.current.clientWidth, height: ref.current.clientHeight });
       });
@@ -89,7 +112,7 @@ export function PriceChart({
     }
 
     build();
-    return () => { disposed = true; ro?.disconnect(); chart?.remove?.(); chartRef.current = null; };
+    return () => { disposed = true; clearInterval(pollRef.current); ro?.disconnect(); chart?.remove?.(); chartRef.current = null; };
   }, [address, timeframe]); // refetch when timeframe changes
 
   // right-click menu
@@ -121,6 +144,15 @@ export function PriceChart({
   return (
     <div className="group relative h-[360px] w-full" onContextMenu={onContextMenu}>
       <div ref={ref} className="h-full w-full" />
+      {!loading && !empty && (
+        <div className="pointer-events-none absolute left-2 top-2 z-30 flex items-center gap-1.5 rounded-md bg-ink-900/70 px-1.5 py-0.5 backdrop-blur">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className={`absolute inline-flex h-full w-full rounded-full bg-mint opacity-75 ${live ? "animate-ping" : ""}`} />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-mint" />
+          </span>
+          <span className="led text-[10px] font-bold uppercase tracking-wide text-mint">Live</span>
+        </div>
+      )}
       {loading && <div className="absolute inset-0 flex items-center justify-center"><span className="led text-sm text-muted">loading chart…</span></div>}
       {empty && <div className="absolute inset-0 flex items-center justify-center"><span className="led text-sm text-muted">No chart data.</span></div>}
 

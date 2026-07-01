@@ -284,3 +284,7 @@ body {
 .store-badge, .login-pill { transition: transform 160ms ease, background 160ms ease, opacity 160ms ease; cursor: pointer; }
 .store-badge:hover, .login-pill:hover { transform: translateY(-1px); }
 .login-pill:hover { background: #0d0d1c; }
+
+/* horizontally-scrollable stat bar without a visible scrollbar */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

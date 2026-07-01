@@ -73,9 +73,7 @@ export function ChartArea({ token }: { token: Token }) {
       <div className="flex flex-wrap items-center gap-4 border-t border-ink-700 px-3 py-2 text-xs">
         <span className="text-muted">Chart overlays</span>
         <Check label="My swaps" />
-        <Check label="Thesis" />
-        <Check label="Friends only" off />
-        <Check label="Min size (>$1K)" off />
+        <Check label="Thesis" off />
       </div>
     </div>
   );

@@ -58,25 +58,28 @@ export function TokenHeader({ token }: { token: Token }) {
         </div>
       </div>
 
-      <div className="ml-auto flex flex-wrap items-center gap-x-5 gap-y-2">
-        <Stat label="Market cap" value={fmtUsd(token.marketCap, { compact: true })} />
-        <Stat label="Price" value={fmtUsd(token.price)} />
-        <Stat label="24H change" value={fmtPct(token.priceChange24h)} tone={up ? "up" : "down"} />
-        <Stat label="24H Vol" value={fmtUsd(token.volume24h, { compact: true })} />
-        <Stat label="Liquidity" value={fmtUsd(token.liquidity, { compact: true })} />
-        <Stat label="Holders" value={fmtNum(s.holders)} />
-        <Stat label="Top 10" value={`${s.top10.toFixed(2)}%`} />
+      <div className="ml-auto flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <div className="flex w-[104px] shrink-0 flex-col items-center py-1">
+          <span className="text-xs text-muted">Market cap</span>
+          <span className="led text-lg font-medium text-bone">{fmtUsd(token.marketCap, { compact: true })}</span>
+        </div>
+        <StatBox label="Price" value={fmtUsd(token.price)} />
+        <StatBox label="24H change" value={fmtPct(token.priceChange24h)} tone={up ? "up" : "down"} />
+        <StatBox label="24H Vol." value={fmtUsd(token.volume24h, { compact: true })} />
+        <StatBox label="Liquidity" value={fmtUsd(token.liquidity, { compact: true })} />
+        <StatBox label="Holders" value={fmtNum(s.holders)} />
+        <StatBox label="Top 10 holding" value={`${s.top10.toFixed(2)}%`} />
       </div>
     </div>
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone?: "up" | "down" }) {
+function StatBox({ label, value, tone }: { label: string; value: string; tone?: "up" | "down" }) {
   const color = tone === "up" ? "text-mint" : tone === "down" ? "text-ember" : "text-bone";
   return (
-    <div className="border-l border-ink-600 pl-5 first:border-0 first:pl-0">
-      <p className="text-[10px] uppercase tracking-wide text-muted">{label}</p>
-      <p className={`led text-sm font-bold ${color}`}>{value}</p>
+    <div className="flex min-w-[88px] shrink-0 flex-col items-center rounded-lg bg-ink-800 px-2 py-1.5">
+      <span className="whitespace-nowrap text-xs text-muted">{label}</span>
+      <span className={`led whitespace-nowrap text-sm font-medium ${color}`}>{value}</span>
     </div>
   );
 }
