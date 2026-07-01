@@ -139,12 +139,12 @@ export function SwapPanel({
           </div>
         </div>
 
-        {/* action — green only when a valid, affordable amount; otherwise fomo's dark button */}
+        {/* action — fomo's dark button always (never green); just clickable when valid */}
         <button type="button" onClick={execute} disabled={!canBuy}
-          className={`h-11 overflow-hidden rounded-xl px-4 py-2 text-base font-bold ${
+          className={`h-11 overflow-hidden rounded-xl border border-bg-tertiary/60 bg-bg-secondary px-4 py-2 text-base font-bold ${
             canBuy
-              ? "bg-green text-bg-primary hover:brightness-110"
-              : "cursor-not-allowed border border-bg-tertiary/60 bg-bg-secondary text-text-secondary"
+              ? "cursor-pointer text-text-primary hover:bg-bg-tertiary"
+              : "cursor-not-allowed text-text-secondary"
           }`}>
           <span key={`${side}-${sym}`} className="inline-block animate-flip-up">Buy {sym}</span>
         </button>
