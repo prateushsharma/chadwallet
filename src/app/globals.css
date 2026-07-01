@@ -206,73 +206,10 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* ── community: "a trading app for the rest of us" ──
-   Photo lives in its own .community-bg layer and is darkened with filter +
-   a dark-blue ::after overlay, so the rings and text stay crisp. */
-.community-section {
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  background: #06082a;
-}
-.community-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url("/images/landing/community-bg.webp");
-  background-size: cover;
-  background-position: center bottom;
-  background-repeat: no-repeat;
-  /* darken moderately so the crowd stays visible like fomo */
-  filter: brightness(0.55) saturate(0.95);
-  z-index: 0;
-}
-.community-section::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  /* subtle dark-blue veil: keeps the crowd visible, adds contrast behind the text */
-  background:
-    radial-gradient(circle at center, rgba(20, 24, 90, 0.20) 0%, rgba(6, 8, 42, 0.42) 62%, rgba(3, 4, 22, 0.58) 100%),
-    linear-gradient(to bottom, rgba(9, 12, 58, 0.28), rgba(4, 5, 25, 0.52));
-}
-.circle-layer {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 980px;
-  height: 980px;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  pointer-events: none;
-}
-.outer-circle {
-  background-image: url("/images/landing/outer-circle.webp");
-  animation: rotateClockwise 70s linear infinite;
-}
-.inner-circle {
-  width: 760px;
-  height: 760px;
-  background-image: url("/images/landing/inner-circle.webp");
-  animation: rotateAntiClockwise 55s linear infinite;
-}
-.community-content { position: relative; z-index: 3; }
-@keyframes rotateClockwise {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-@keyframes rotateAntiClockwise {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(-360deg); }
-}
-@media (max-width: 768px) {
-  .circle-layer { width: 720px; height: 720px; }
-  .inner-circle { width: 560px; height: 560px; }
-}
+/* ── community: orbit-ring rotation (fomo uses <img> rings + a spin animation) ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin-inner { animation: spin 30s linear infinite reverse; }
+.animate-spin-outer { animation: spin 45s linear infinite; }
 @keyframes orbit {
   from { transform: rotate(0deg) translateX(var(--r)) rotate(0deg); }
   to { transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); }
