@@ -22,8 +22,9 @@ const config: Config = {
           glow: "#5BFFA6",
         },
         sol: "#14F195", // Solana green accent (active states)
-        ember: "#FF5C5C", // sell / down
+        ember: "#FF622E", // sell / down (fomo)
         mint: "#26ED80", // buy / up
+        accent: "#606AF7", // fomo indigo — deposit / checks / fees / positions
         // marketing gradient stops (blue -> teal -> mint)
         brandblue: "#2594FF",
         brandteal: "#3FD3D0",
