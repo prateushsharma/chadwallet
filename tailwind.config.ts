@@ -4,6 +4,7 @@ const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      spacing: { "0.75": "0.1875rem" },
       colors: {
         // ChadWallet palette — matched to fomo.family (bg #060510 confirmed from their site)
         ink: {
