@@ -18,13 +18,13 @@ const config: Config = {
         muted: "#9C9BAB", // text-secondary
         dim: "#6B6A7B", // text-tertiary (placeholders, "$", muted icons)
         chad: {
-          DEFAULT: "#40DF88", // brand green (Buy)
+          DEFAULT: "#21C95E", // brand green (Buy)
           dim: "#28B368",
           glow: "#6BFFB0",
         },
         sol: "#14F195", // Solana green accent
         ember: "#FF622E", // sell / down
-        mint: "#40DF88", // buy / up
+        mint: "#21C95E", // buy / up
         accent: "#6E5CF7", // fomo indigo — deposit / checks / fees / positions
         // marketing gradient stops (blue -> teal -> mint)
         brandblue: "#2594FF",
@@ -37,7 +37,7 @@ const config: Config = {
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(64,223,136,0.25), 0 0 36px -8px rgba(64,223,136,0.5)",
+        glow: "0 0 0 1px rgba(33,201,94,0.25), 0 0 36px -8px rgba(33,201,94,0.5)",
         panel: "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 24px 70px -34px rgba(0,0,0,0.95)",
       },
       animation: {

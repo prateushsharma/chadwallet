@@ -29,45 +29,55 @@ export function LeftPanel({
   return (
     <div className="flex h-full flex-col">
       {/* tabs */}
-      <div className="flex items-center gap-3 border-b border-ink-600 bg-ink-800/60 px-3 py-2.5 text-sm">
-        {TABS.map((t) => (
-          <React.Fragment key={t}>
-            <button
-              onClick={() => setTab(t)}
-              className={`flex items-center gap-1 whitespace-nowrap font-medium transition ${
-                tab === t ? "text-bone" : "text-muted hover:text-bone"
-              }`}
-            >
-              {t === "Alerts" && (
-                <span className="relative">
-                  🔔
-                  <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-ember" />
-                </span>
-              )}
-              {t}
-            </button>
-            {t !== "Feed" && <span className="h-4 w-px bg-ink-600/50" />}
-          </React.Fragment>
-        ))}
+      <div className="flex shrink-0 items-center gap-2 rounded-t-xl bg-ink-800 px-3 py-2.5 text-sm">
+        <div className="no-scrollbar flex flex-1 items-center gap-2 overflow-x-auto font-medium">
+          {TABS.map((t) => (
+            <React.Fragment key={t}>
+              <button
+                onClick={() => setTab(t)}
+                className={`flex shrink-0 items-center gap-1 whitespace-nowrap transition ${
+                  tab === t ? "text-bone" : "text-muted hover:text-bone"
+                }`}
+              >
+                {t === "Alerts" && (
+                  <span className="relative flex items-center justify-center">
+                    <svg width="14" height="14" viewBox="0 0 24 24" className="fill-current">
+                      <path d="M12 2a6 6 0 00-6 6c0 3.6-1 5.3-1.8 6.2-.4.4-.6.6-.6 1 0 .6.5 1 1.2 1h14.4c.7 0 1.2-.4 1.2-1 0-.4-.2-.6-.6-1C18 13.3 18 11.6 18 8a6 6 0 00-6-6zm0 20a3 3 0 002.8-2H9.2a3 3 0 002.8 2z" />
+                    </svg>
+                    <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full border border-ink-800 bg-ember" />
+                  </span>
+                )}
+                {t}
+              </button>
+              {t !== "Feed" && <span className="h-4 w-px shrink-0 bg-ink-600/40" />}
+            </React.Fragment>
+          ))}
+        </div>
+        <button className="shrink-0 p-1 text-dim hover:text-bone" aria-label="Collapse panel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M13 17l-5-5 5-5M20 17l-5-5 5-5" />
+          </svg>
+        </button>
       </div>
 
       {tab === "Tokens" ? (
         <>
           {/* filter chips */}
-          <div className="no-scrollbar flex gap-2 overflow-x-auto px-3 pb-1 pt-2">
-            {CHIPS.map((c) => (
-              <button
-                key={c}
-                onClick={() => setChip(c)}
-                className={`inline-flex h-6 shrink-0 items-center whitespace-nowrap rounded-md border px-1.5 text-xs font-bold ${
-                  chip === c
-                    ? "border-ink-500 bg-ink-600 text-bone"
-                    : "border-ink-600 text-muted hover:text-bone"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
+          <div className="relative shrink-0">
+            <div className="no-scrollbar flex gap-2 overflow-x-auto px-3 pb-1 pt-2">
+              {CHIPS.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setChip(c)}
+                  className={`inline-flex h-6 shrink-0 items-center whitespace-nowrap rounded-md border border-ink-600 px-1.5 text-xs font-bold ${
+                    chip === c ? "bg-ink-600 text-bone" : "text-muted hover:bg-ink-700"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-ink-900 to-transparent" />
           </div>
           <TrendingList tokens={tokens} selected={selected} onSelect={onSelect} />
         </>
@@ -80,12 +90,14 @@ export function LeftPanel({
       )}
 
       {/* split buttons */}
-      <div className="mx-2 mt-1 flex items-center gap-2 pb-2">
-        <button className="led flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-ink-600 bg-ink-800 py-1 text-xs text-muted hover:text-bone">
-          ⬓ Split bottom
+      <div className="mx-2 mb-2 mt-1 flex items-center gap-2">
+        <button className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-ink-600 bg-ink-800 py-1 text-xs text-dim hover:text-bone">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="7" rx="1.5" /><rect x="3" y="13" width="18" height="7" rx="1.5" /></svg>
+          Split bottom
         </button>
-        <button className="led flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-ink-600 bg-ink-800 py-1 text-xs text-muted hover:text-bone">
-          ⬔ Split right
+        <button className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-ink-600 bg-ink-800 py-1 text-xs text-dim hover:text-bone">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="3" width="7" height="18" rx="1.5" /><rect x="13" y="3" width="7" height="18" rx="1.5" /></svg>
+          Split right
         </button>
       </div>
     </div>
