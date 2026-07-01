@@ -116,7 +116,7 @@ export function TerminalNav() {
           <LiveBadge />
           <div className="text-right">
             <p className="led text-sm font-bold text-bone">$0.00 <span className="text-muted">cash</span></p>
-            <button className="text-xs font-bold text-chad hover:underline">Deposit more</button>
+            <button className="text-xs font-bold text-accent hover:underline">Deposit more</button>
           </div>
           <div className="text-right">
             <p className="led text-sm font-bold text-bone">$0.00</p>

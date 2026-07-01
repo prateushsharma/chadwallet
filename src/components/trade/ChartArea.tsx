@@ -92,7 +92,7 @@ function Check({ label, off }: { label: string; off?: boolean }) {
   const [on, setOn] = useState(!off);
   return (
     <button onClick={() => setOn((v) => !v)} className="flex items-center gap-1.5 text-muted hover:text-bone">
-      <span className={`grid h-3.5 w-3.5 place-items-center rounded border ${on ? "border-chad bg-chad text-ink" : "border-ink-500"}`}>
+      <span className={`grid h-3.5 w-3.5 place-items-center rounded border ${on ? "border-accent bg-accent text-white" : "border-ink-500"}`}>
         {on && <svg viewBox="0 0 24 24" className="h-2.5 w-2.5 fill-none stroke-current" strokeWidth="4"><path d="M5 12l5 5L20 6" strokeLinecap="round" strokeLinejoin="round" /></svg>}
       </span>
       {label}

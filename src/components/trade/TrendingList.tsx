@@ -2,7 +2,6 @@
 
 import React, { useMemo, useState } from "react";
 import { Token } from "@/lib/types";
-import { deriveStats } from "@/lib/derive";
 import { fmtUsd, fmtPct, fmtNum } from "@/lib/format";
 
 export function TrendingList({
@@ -82,7 +81,6 @@ export function TrendingList({
 }
 
 function HoverCard({ token, x, y }: { token: Token; x: number; y: number }) {
-  const s = deriveStats(token);
   const up = token.priceChange24h >= 0;
   // keep card on-screen
   const left = Math.min(x + 16, (typeof window !== "undefined" ? window.innerWidth : 1200) - 280);
@@ -110,17 +108,7 @@ function HoverCard({ token, x, y }: { token: Token; x: number; y: number }) {
         <Row k="Market cap" v={fmtUsd(token.marketCap, { compact: true })} />
         <Row k="Liquidity" v={fmtUsd(token.liquidity, { compact: true })} />
         <Row k="24h vol" v={fmtUsd(token.volume24h, { compact: true })} />
-        <Row k="Holders" v={fmtNum(s.holders)} />
-      </div>
-      <div className="mt-2 border-t border-ink-600 pt-2">
-        <div className="led flex items-center justify-between text-[11px]">
-          <span className="text-mint">{fmtNum(s.buys)} buys</span>
-          <span className="text-ember">{fmtNum(s.sells)} sells</span>
-        </div>
-        <div className="mt-1 flex h-1 overflow-hidden rounded-full">
-          <span className="bg-mint" style={{ width: `${(s.buys / (s.buys + s.sells)) * 100}%` }} />
-          <span className="flex-1 bg-ember" />
-        </div>
+        <Row k="24h chg" v={fmtPct(token.priceChange24h)} />
       </div>
     </div>
   );
