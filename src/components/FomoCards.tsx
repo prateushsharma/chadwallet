@@ -27,24 +27,19 @@ export function FomoCards() {
           {CARDS.map((c) => (
             <article
               key={c.kicker}
-              className="relative flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0a0a0d]"
+              className="group flex aspect-square flex-col gap-2 overflow-hidden rounded-[25px] border border-ink-600 bg-ink-800 pb-0 pt-8 transition-colors duration-300 hover:border-white/[0.12]"
             >
-              <div className="px-6 pt-6">
-                <p className="font-mono text-xs font-bold uppercase tracking-wider text-[#6f76f6]">
-                  {c.kicker}
-                </p>
-                <h3 className="mt-3 font-display text-2xl font-bold leading-tight text-bone">
-                  {c.heading}
-                </h3>
-              </div>
-              {/* full-bleed image slot (paste your asset; it fades into the card bottom) */}
-              <div className="relative mt-5 flex-1">
+              <div className="px-8 font-mono font-bold text-[#606AF7]">{c.kicker}</div>
+              <h3 className="px-8 font-display text-[28px] font-bold leading-8 tracking-tight text-bone sm:text-[36px] sm:leading-10">
+                {c.heading}
+              </h3>
+              <div className="relative min-h-0 flex-1">
                 <Image
                   src={c.img}
                   alt=""
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover object-top"
+                  className="object-contain object-bottom transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
             </article>
