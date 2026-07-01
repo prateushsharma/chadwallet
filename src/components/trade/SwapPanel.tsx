@@ -116,7 +116,7 @@ export function SwapPanel({
           <div className="flex min-w-0 flex-1 items-center gap-px p-4 pr-0">
             <div className="text-dim">$</div>
             <input value={usd} onChange={(e) => setUsd(e.target.value)} placeholder="0" inputMode="decimal"
-              className="led min-w-0 flex-1 bg-transparent font-bold text-bone outline-none placeholder:text-dim" />
+              className="min-w-0 flex-1 bg-transparent text-bone outline-none placeholder:text-dim" />
           </div>
           <div className="relative flex shrink-0 flex-col items-end justify-center p-4 pl-6">
             <div className="text-sm font-medium text-dim">
@@ -130,7 +130,7 @@ export function SwapPanel({
           <div className="grid flex-1 grid-cols-4 gap-2">
             {quick.map((q) => (
               <button key={q} type="button" onClick={() => setUsd(q.replace("$", ""))}
-                className="led h-8 rounded-lg bg-ink-800 px-3 text-sm font-bold text-bone hover:brightness-125">
+                className="h-8 rounded-lg bg-ink-800 px-3 text-sm font-bold text-bone hover:brightness-125">
                 {q}
               </button>
             ))}
@@ -148,7 +148,7 @@ export function SwapPanel({
         {/* available */}
         <div className="flex flex-col px-2 text-sm">
           <div className="flex items-center justify-between">
-            <div className="text-muted"><span className="led">{fmtUsd(DEMO_BALANCE)} available</span></div>
+            <div className="text-muted"><span>{fmtUsd(DEMO_BALANCE)} available</span></div>
           </div>
         </div>
 
@@ -265,7 +265,7 @@ function Change({ label, v, live }: { label: string; v: number; live: boolean })
   return (
     <div className="flex flex-1 flex-col items-center rounded-md border border-ink-600 py-1.5 hover:bg-ink-800">
       <span className="text-xs text-muted">{label}</span>
-      <span className={`led text-xs font-medium ${up ? "text-mint" : "text-ember"}`}>{live ? fmtPct(v) : "—"}</span>
+      <span className={`text-xs font-medium ${up ? "text-mint" : "text-ember"}`}>{live ? fmtPct(v) : "—"}</span>
     </div>
   );
 }
@@ -274,8 +274,8 @@ function SplitBar({ l, lWord, r, rWord, pct }: { l: string; lWord: string; r: st
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center justify-between text-sm">
-        <span><span className="led font-medium text-bone">{l}</span> <span className="text-muted">{lWord}</span></span>
-        <span><span className="led font-medium text-bone">{r}</span> <span className="text-muted">{rWord}</span></span>
+        <span><span className="font-medium text-bone">{l}</span> <span className="text-muted">{lWord}</span></span>
+        <span><span className="font-medium text-bone">{r}</span> <span className="text-muted">{rWord}</span></span>
       </div>
       <div className="flex h-1.5 gap-1">
         <span className="rounded-[1.5px] bg-mint transition-[width] duration-150" style={{ width: `${pct}%` }} />
@@ -299,7 +299,7 @@ function Row({ label, value, onClick }: { label: string; value: string; onClick?
     <div className="flex items-center gap-2 py-1">
       <span className="shrink-0 whitespace-nowrap text-xs text-muted">{label}</span>
       <span className="min-w-4 flex-1 -translate-y-px border-b border-dashed border-ink-600" />
-      <button onClick={onClick} className={`led shrink-0 whitespace-nowrap text-xs font-medium text-bone ${onClick ? "hover:opacity-70" : "cursor-default"}`}>
+      <button onClick={onClick} className={`shrink-0 whitespace-nowrap text-xs font-medium text-bone ${onClick ? "hover:opacity-70" : "cursor-default"}`}>
         {value}
       </button>
     </div>
@@ -323,9 +323,9 @@ function PositionList({ positions, token }: { positions: Position[]; token: Toke
           <div key={p.address} className="rounded-lg border border-ink-600 bg-ink-800 p-3">
             <div className="flex items-center justify-between">
               <span className="font-display text-sm font-bold text-bone">{p.symbol}</span>
-              <span className="led text-sm text-bone">{fmtUsd(value)}</span>
+              <span className="text-sm text-bone">{fmtUsd(value)}</span>
             </div>
-            <div className="led mt-1 flex items-center justify-between text-xs">
+            <div className="mt-1 flex items-center justify-between text-xs">
               <span className="text-muted">{fmtNum(p.amount)} tokens</span>
               <span className={up ? "text-mint" : "text-ember"}>{up ? "+" : ""}{fmtUsd(pnl)} ({pct.toFixed(1)}%)</span>
             </div>
