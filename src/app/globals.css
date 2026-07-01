@@ -218,7 +218,7 @@ body {
 .community-bg {
   position: absolute;
   inset: 0;
-  background-image: url("/images/landing/community-bg.webp");
+  background-image: url("/images/landing/legends.webp");
   background-size: cover;
   background-position: center bottom;
   background-repeat: no-repeat;
