@@ -94,10 +94,10 @@ export function TerminalNav() {
         <div className="relative mt-1 h-12 w-100 min-w-80 large-desktop:w-160">
           <div ref={boxRef} className="absolute left-1/2 top-0 z-modal flex w-100 -translate-x-1/2 flex-col large-desktop:w-160">
             <div className="relative">
-              <div className="relative z-10 flex flex-col">
+              <div className={`relative z-10 flex flex-col ${open ? "rounded-xl border border-bg-tertiary bg-bg-primary shadow-panel" : ""}`}>
                 <div
                   onClick={() => { setOpen(true); inputRef.current?.focus(); }}
-                  className="flex h-12 cursor-text items-center gap-2 rounded-xl border border-bg-tertiary bg-bg-primary px-3 hover:bg-bg-secondary"
+                  className={`flex h-12 cursor-text items-center gap-2 px-3 ${open ? "rounded-t-xl border-b border-bg-tertiary" : "rounded-xl border border-bg-tertiary bg-bg-primary hover:bg-bg-secondary"}`}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
                     <div className="flex min-w-0 flex-1 items-center gap-2">
@@ -125,7 +125,7 @@ export function TerminalNav() {
                 </div>
 
                 {/* dropdown */}
-                <div className={`overflow-hidden transition-[max-height,opacity] duration-150 ease-out ${open ? "max-h-110 opacity-100" : "pointer-events-none max-h-0 opacity-0"}`}>
+                <div className={`overflow-hidden rounded-b-xl transition-[max-height,opacity] duration-150 ease-out ${open ? "max-h-110 opacity-100" : "pointer-events-none max-h-0 opacity-0"}`}>
                   <div>
                     <div className="flex max-h-110 min-h-70 flex-col overflow-y-auto">
                       <div className="flex h-9 shrink-0 items-center justify-between px-2 text-sm text-text-secondary">
