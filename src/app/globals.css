@@ -316,3 +316,12 @@ body {
 .hover-scrim:hover::after { opacity: 1; }
 @keyframes flip-up { 0% { transform: translateY(65%); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 .animate-flip-up { animation: flip-up 0.3s ease-out; }
+
+/* fomo's scrollbar-none — hide the scrollbar entirely */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
