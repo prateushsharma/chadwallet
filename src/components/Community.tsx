@@ -1,68 +1,77 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import Image from "next/image";
 import { StartTradingButton } from "@/components/AuthButton";
 
 const ANDROID = "https://play.google.com/store/apps/details?id=xyz.chadwallet.www";
 
 export function Community() {
   return (
-    <section className="community relative overflow-hidden border-t border-ink-600">
-      <div className="relative mx-auto max-w-4xl px-4 py-28 text-center sm:px-6">
-        {/* orbiting brand orbs */}
-        <Orbs />
+    <section className="community relative flex aspect-square flex-col items-center justify-center overflow-hidden">
+      {/* blurred-crowd purple backdrop — drop the image at public/images/landing/community-bg.webp */}
+      <Image
+        src="/images/landing/community-bg.webp"
+        alt=""
+        fill
+        sizes="100vw"
+        className="pointer-events-none object-cover"
+      />
 
-        <h2 className="relative font-display text-4xl font-extrabold leading-tight tracking-tight text-balance sm:text-6xl">
-          a trading app for
+      {/* rotating orbit rings — inner spins reverse, outer spins forward.
+          Drop the transparent PNGs at public/images/landing/{inner,outer}-circle.webp */}
+      <img
+        loading="lazy"
+        alt=""
+        src="/images/landing/inner-circle.webp"
+        className="animate-spin-inner pointer-events-none absolute inset-0 z-[1] m-auto w-[35vw] sm:w-[30vw]"
+      />
+      <img
+        loading="lazy"
+        alt=""
+        src="/images/landing/outer-circle.webp"
+        className="animate-spin-outer pointer-events-none absolute inset-0 z-[1] m-auto w-screen sm:w-[55vw] sm:max-w-[1100px]"
+      />
+
+      {/* centered content */}
+      <div className="relative z-10 flex w-[70vw] flex-col items-center gap-3 sm:gap-6">
+        <h2 className="text-center font-display text-[40px] font-bold leading-10 tracking-tighter text-bone sm:text-[60px] sm:leading-[60px]">
+          a trading app
           <br />
-          the rest of us.
+          for the rest of us
         </h2>
-        <p className="relative mx-auto mt-5 max-w-md text-lg text-muted">
-          Join 500,000+ traders making their name on ChadWallet.
+        <p className="text-center tracking-tight text-muted sm:text-[22px] sm:leading-7">
+          join 500,000 traders making their name on ChadWallet
         </p>
-        <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
-          <StartTradingButton className="rounded-xl bg-chad px-7 py-3.5 font-display font-bold text-ink shadow-glow transition hover:bg-chad-glow">Start trading</StartTradingButton>
-          <a
-            href={ANDROID}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-glass rounded-xl px-7 py-3.5 font-display font-bold text-bone transition"
-          >
-            Download app
-          </a>
+
+        {/* same buttons as the hero */}
+        <div className="pt-6">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <StartTradingButton className="group flex w-52 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#606AF780] py-3 text-lg font-bold text-white backdrop-blur-md transition-colors duration-150 hover:bg-[#606AF7CC]">
+              <span>Start trading</span>
+              <span className="flex w-0 items-center overflow-hidden opacity-0 transition-all duration-150 ease-out group-hover:w-7 group-hover:opacity-100">
+                <svg viewBox="0 0 24 24" className="ml-2 h-5 w-5 shrink-0 fill-none stroke-current" strokeWidth="2.2">
+                  <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </StartTradingButton>
+
+            <a
+              href={ANDROID}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-glass group flex w-52 items-center justify-center overflow-hidden rounded-xl py-3 text-lg font-bold text-bone transition"
+            >
+              <span className="flex w-0 items-center overflow-hidden opacity-0 transition-all duration-150 ease-out group-hover:w-7 group-hover:opacity-100">
+                <svg viewBox="0 0 24 24" className="mr-2 h-5 w-5 shrink-0 fill-none stroke-current" strokeWidth="2.2">
+                  <path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span>Download app</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Orbs() {
-  const orbs = [
-    { r: 220, dur: 28, size: 44, grad: "from-chad to-mint", top: "30%", left: "50%" },
-    { r: 300, dur: 38, size: 36, grad: "from-brandblue to-brandteal", top: "30%", left: "50%" },
-    { r: 180, dur: 22, size: 30, grad: "from-brandmint to-brandblue", top: "55%", left: "50%" },
-    { r: 340, dur: 44, size: 52, grad: "from-gold to-chad", top: "55%", left: "50%" },
-  ];
-  return (
-    <div className="pointer-events-none absolute inset-0">
-      {orbs.map((o, i) => (
-        <span
-          key={i}
-          className="orb absolute"
-          style={{
-            top: o.top,
-            left: o.left,
-            ["--r" as any]: `${o.r}px`,
-            ["--dur" as any]: `${o.dur}s`,
-          }}
-        >
-          <span
-            className={`block rounded-2xl bg-gradient-to-br ${o.grad} opacity-40 blur-[1px]`}
-            style={{ width: o.size, height: o.size }}
-          />
-        </span>
-      ))}
-    </div>
   );
 }

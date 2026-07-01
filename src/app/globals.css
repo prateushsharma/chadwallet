@@ -206,13 +206,16 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* community gradient section */
+/* community section — lavender/purple fallback shown behind community-bg.webp */
 .community {
   background:
-    radial-gradient(80% 60% at 50% 0%, rgba(120, 90, 255, 0.28), transparent 70%),
-    radial-gradient(60% 50% at 50% 100%, rgba(38, 237, 128, 0.12), transparent 70%),
-    #060713;
+    radial-gradient(55% 42% at 50% 34%, #201f47 0%, rgba(46, 44, 92, 0.55) 55%, transparent 100%),
+    linear-gradient(180deg, #b4b4d4 0%, #9494bd 42%, #6f6f9c 100%);
 }
+/* orbit-ring rotation (inner spins reverse, outer forward) */
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin-inner { animation: spin 30s linear infinite reverse; }
+.animate-spin-outer { animation: spin 45s linear infinite; }
 @keyframes orbit {
   from { transform: rotate(0deg) translateX(var(--r)) rotate(0deg); }
   to { transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); }
