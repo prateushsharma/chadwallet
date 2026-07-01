@@ -10,12 +10,12 @@
 
   /* fomo design tokens — used by fomo's literal class names (bg-bg-secondary, text-text-tertiary, …) */
   --bg-primary: 6 5 16;
-  --bg-secondary: 19 17 32;
-  --bg-tertiary: 38 36 56;
+  --bg-secondary: 18 17 26;
+  --bg-tertiary: 26 25 38;
   --bg-tertiary-solid: 50 47 71;
-  --text-primary: 246 246 251;
-  --text-secondary: 156 155 171;
-  --text-tertiary: 107 106 123;
+  --text-primary: 247 247 247;
+  --text-secondary: 152 153 163;
+  --text-tertiary: 71 75 82;
   --green: 33 201 94;
   --red: 255 98 46;
   --accent-primary: 110 92 247;

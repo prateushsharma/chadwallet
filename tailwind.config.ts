@@ -39,8 +39,8 @@ const config: Config = {
         "text-tertiary": "rgb(var(--text-tertiary) / <alpha-value>)",
         green: "rgb(var(--green) / <alpha-value>)",
         red: "rgb(var(--red) / <alpha-value>)",
-        "green-transparent": "rgba(33, 201, 94, 0.15)",
-        "red-transparent": "rgba(255, 98, 46, 0.15)",
+        "green-transparent": "rgba(33, 201, 94, 0.2)",
+        "red-transparent": "rgba(255, 98, 46, 0.2)",
         "accent-primary": "rgb(var(--accent-primary) / <alpha-value>)",
         // marketing gradient stops (blue -> teal -> mint)
         brandblue: "#2594FF",
