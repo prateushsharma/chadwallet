@@ -62,8 +62,8 @@ export function SwapPanel({
             className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "buy" ? "bg-green-transparent text-green" : "bg-bg-secondary text-text-secondary hover:bg-bg-tertiary"}`}>
             Buy
           </button>
-          <button type="button" onClick={() => setSide("sell")}
-            className={`flex-1 rounded-lg p-2 text-base font-bold transition-colors ${side === "sell" ? "bg-red-transparent text-red" : "bg-bg-secondary text-text-secondary hover:bg-bg-tertiary"}`}>
+          <button type="button" disabled
+            className="flex-1 rounded-lg p-2 text-base font-bold transition-colors bg-bg-secondary text-text-secondary hover:bg-bg-tertiary disabled:opacity-50 disabled:cursor-not-allowed">
             Sell
           </button>
         </div>
@@ -87,7 +87,7 @@ export function SwapPanel({
           <div className="grid flex-1 grid-cols-4 gap-2">
             {quick.map((q) => (
               <button key={q} type="button" onClick={() => setUsd(q.replace("$", ""))}
-                className="hover-scrim h-8 rounded-lg bg-bg-secondary px-3 text-sm font-bold text-text-primary" translate="no">
+                className="hover-scrim h-8 rounded-lg bg-bg-secondary px-3 text-sm font-bold text-text-primary disabled:opacity-50" translate="no">
                 {q}
               </button>
             ))}
@@ -121,14 +121,28 @@ export function SwapPanel({
           <span key={`${side}-${sym}`} className="inline-block animate-flip-up">{side === "buy" ? `Buy ${sym}` : `Sell ${sym}`}</span>
         </button>
 
-        {/* fee row */}
-        <div className="flex items-center justify-between gap-2 px-2 py-1">
-          <div className="flex items-center gap-2">
-            <svg className="size-3 text-accent-primary"><use href="/images/sprite.svg#tag" /></svg>
-            <span className="text-xs font-bold text-accent-primary">Lowest fees: 0.05%</span>
+        {/* token verification row — fomo verbatim */}
+        {token.verified ? (
+          <div className="flex items-center justify-between gap-2 px-2 py-1 text-sm font-medium text-text-secondary">
+            <div className="flex items-center gap-2">
+              <svg className="size-3 shrink-0 text-green"><use href="/images/sprite.svg#badge-check" /></svg>
+              <span className="text-xs font-bold">Verified token</span>
+            </div>
+            <button type="button" aria-label="Verified token info" className="-m-1 flex items-center p-1 text-text-tertiary">
+              <svg className="size-3.5"><use href="/images/sprite.svg#info" /></svg>
+            </button>
           </div>
-          <svg className="size-3.5 text-text-tertiary"><use href="/images/sprite.svg#info" /></svg>
-        </div>
+        ) : (
+          <div className="flex items-center justify-between gap-2 px-2 py-1 text-sm font-medium text-text-secondary">
+            <div className="flex items-center gap-2">
+              <svg className="size-3 shrink-0"><use href="/images/sprite.svg#triangle-exclamation" /></svg>
+              <span className="text-xs font-bold">Unverified token</span>
+            </div>
+            <button type="button" aria-label="Unverified token info" className="-m-1 flex items-center p-1 text-text-tertiary">
+              <svg className="size-3.5"><use href="/images/sprite.svg#info" /></svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

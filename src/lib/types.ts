@@ -9,6 +9,7 @@ export interface Token {
   volume24h: number;
   liquidity: number;
   marketCap: number;
+  verified?: boolean;
 }
 
 export interface Holder {
